@@ -1,6 +1,6 @@
 """
-Application Streamlit - Assistant de Sélection des Référentiels
-Version MVP Professionnelle
+Application Streamlit - Assistant de Conformité Cybersécurité
+Version MVP Complète
 """
 
 import streamlit as st
@@ -14,9 +14,8 @@ from utils.calculations import (
     generer_recommandations,
     formater_cout
 )
-from utils.pdf_export import generer_pdf_rapport
 
-# Configuration de la page
+# ==================== CONFIGURATION ====================
 st.set_page_config(
     page_title="Assistant Conformité Cyber",
     page_icon="🔒",
@@ -24,30 +23,11 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Chargement des données
-@st.cache_data
-def charger_donnees():
-    """Charge les données des référentiels depuis le JSON"""
-    data_path = Path(__file__).parent / "data" / "referentiels.json"
-    with open(data_path, 'r', encoding='utf-8') as f:
-        return json.load(f)
-
-# Initialisation de session state
-if 'etape' not in st.session_state:
-    st.session_state.etape = 1
-if 'profil' not in st.session_state:
-    st.session_state.profil = {}
-if 'economies_selectionnees' not in st.session_state:
-    st.session_state.economies_selectionnees = []
-
-# Chargement données
-data = charger_donnees()
-
-# Header
+# ==================== STYLES CSS ====================
 st.markdown("""
 <style>
 .big-title {
-    font-size: 3rem;
+    font-size: 2.5rem;
     font-weight: bold;
     color: #1E40AF;
     margin-bottom: 0.5rem;
@@ -59,25 +39,51 @@ st.markdown("""
 }
 .info-box {
     background-color: #EFF6FF;
-    border-left: 4px solid: #3B82F6;
+    border-left: 4px solid #3B82F6;
     padding: 1rem;
     border-radius: 0.5rem;
     margin: 1rem 0;
 }
-.metric-card {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    padding: 1.5rem;
-    border-radius: 1rem;
-    color: white;
-    text-align: center;
+.warning-box {
+    background-color: #FEF3C7;
+    border-left: 4px solid #F59E0B;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    margin: 1rem 0;
+}
+.success-box {
+    background-color: #D1FAE5;
+    border-left: 4px solid #10B981;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    margin: 1rem 0;
 }
 </style>
 """, unsafe_allow_html=True)
 
+# ==================== CHARGEMENT DONNÉES ====================
+@st.cache_data
+def charger_donnees():
+    """Charge les données des référentiels depuis le JSON"""
+    data_path = Path(__file__).parent / "data" / "referentiels.json"
+    with open(data_path, 'r', encoding='utf-8') as f:
+        return json.load(f)
+
+# Charger les données UNE FOIS au début
+data = charger_donnees()
+
+# ==================== INITIALISATION SESSION STATE ====================
+if 'etape' not in st.session_state:
+    st.session_state.etape = 1
+if 'profil' not in st.session_state:
+    st.session_state.profil = {}
+if 'economies_selectionnees' not in st.session_state:
+    st.session_state.economies_selectionnees = []
+
+# ==================== HEADER ====================
 st.markdown('<div class="big-title">🔒 Assistant de Conformité Cybersécurité</div>', unsafe_allow_html=True)
 st.markdown('<div class="subtitle">Outil intelligent adapté à votre profil et budget</div>', unsafe_allow_html=True)
 
-# Disclaimer sources
 st.info("""
 📊 **Sources des coûts:** Estimations basées sur des consultants canadiens/québécois (2024-2026), 
 études de marché (Matayo AI, IAS Canada, Secureframe) et documents officiels (NIST, CAI Québec). 
@@ -181,7 +187,12 @@ if st.session_state.etape == 1:
 elif st.session_state.etape == 2:
     st.header("💡 Étape 2: Évaluation de l'existant")
     
-    st.info("💡 Cochez tout ce que vous avez DÉJÀ en place pour réduire considérablement les coûts d'implémentation!")
+    st.markdown("""
+    <div class="info-box">
+        <strong>💡 Astuce:</strong> Cochez tout ce que vous avez DÉJÀ en place pour réduire considérablement 
+        les coûts d'implémentation! Chaque élément coché représente des économies substantielles.
+    </div>
+    """, unsafe_allow_html=True)
     
     # Organiser par catégorie
     economies_data = data['economies']
@@ -236,9 +247,10 @@ elif st.session_state.etape == 2:
     with col2:
         st.metric("Éléments cochés", len(economies_selectionnees))
     with col3:
-        st.empty()
+        pct = round((total_economies / 170000) * 100) if total_economies > 0 else 0
+        st.metric("% du maximum", f"{pct}%")
     
-    st.caption("Grâce aux éléments déjà en place")
+    st.caption("💡 Économies maximales possibles: 170 000$ (si tous les éléments sont cochés)")
     
     st.divider()
     
@@ -271,7 +283,7 @@ elif st.session_state.etape == 3:
     recommandations = generer_recommandations(obligatoires, optionnels, total_economies, profil['budget'])
     
     # Afficher profil résumé
-    st.subheader("Votre profil")
+    st.subheader("📋 Votre profil")
     col1, col2, col3, col4 = st.columns(4)
     
     secteur_labels = {
@@ -295,7 +307,14 @@ elif st.session_state.etape == 3:
     st.divider()
     
     # Vue d'ensemble
-    st.subheader("📊 Vue d'ensemble")
+    st.subheader("📊 Vue d'ensemble - 3 approches")
+    
+    st.markdown("""
+    <div class="info-box">
+        <strong>💡 Choisissez votre approche:</strong> Nous vous proposons 3 niveaux d'investissement selon vos besoins et contraintes.
+    </div>
+    """, unsafe_allow_html=True)
+    
     col1, col2, col3 = st.columns(3)
     
     totaux = recommandations['totaux']
@@ -311,19 +330,21 @@ elif st.session_state.etape == 3:
                 {'✓ Reste: ' + formater_cout(budget_info['minimal']['reste']) if not budget_info['minimal']['depasse'] 
                  else '⚠️ Dépasse: ' + formater_cout(budget_info['minimal']['montant_depassement'])}
             </div>
+            <div style='font-size: 0.7rem; margin-top: 0.5rem; opacity: 0.9;'>Travail interne, templates gratuits</div>
         </div>
         """, unsafe_allow_html=True)
     
     with col2:
         st.markdown(f"""
         <div style='background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); 
-                    padding: 1.5rem; border-radius: 1rem; color: white; text-align: center; border: 3px solid white;'>
+                    padding: 1.5rem; border-radius: 1rem; color: white; text-align: center; border: 3px solid #1e40af;'>
             <div style='font-size: 0.9rem; margin-bottom: 0.5rem;'>⭐ Approche RECOMMANDÉE</div>
             <div style='font-size: 2.5rem; font-weight: bold;'>{formater_cout(totaux['standard'])}</div>
             <div style='font-size: 0.8rem; margin-top: 0.5rem;'>
                 {'✓ Reste: ' + formater_cout(budget_info['standard']['reste']) if not budget_info['standard']['depasse'] 
                  else '⚠️ Dépasse: ' + formater_cout(budget_info['standard']['montant_depassement'])}
             </div>
+            <div style='font-size: 0.7rem; margin-top: 0.5rem; opacity: 0.9;'>Mix interne/externe, MEILLEUR ROI</div>
         </div>
         """, unsafe_allow_html=True)
     
@@ -337,6 +358,7 @@ elif st.session_state.etape == 3:
                 {'✓ Reste: ' + formater_cout(budget_info['maximal']['reste']) if not budget_info['maximal']['depasse'] 
                  else '⚠️ Dépasse: ' + formater_cout(budget_info['maximal']['montant_depassement'])}
             </div>
+            <div style='font-size: 0.7rem; margin-top: 0.5rem; opacity: 0.9;'>Consultants seniors, outils premium</div>
         </div>
         """, unsafe_allow_html=True)
     
@@ -345,6 +367,13 @@ elif st.session_state.etape == 3:
     # Obligations
     if recommandations['obligatoires']:
         st.subheader("⚠️ À IMPLÉMENTER MAINTENANT - Obligations légales")
+        
+        st.markdown("""
+        <div class="warning-box">
+            <strong>⚠️ Attention:</strong> Ces référentiels sont OBLIGATOIRES selon votre profil. 
+            Ne pas les implémenter expose votre organisation à des risques légaux et financiers importants.
+        </div>
+        """, unsafe_allow_html=True)
         
         for idx, ref in enumerate(recommandations['obligatoires'], 1):
             with st.expander(f"**{idx}. {ref['name']}** - {ref['description']}", expanded=True):
@@ -355,20 +384,49 @@ elif st.session_state.etape == 3:
                 with col1:
                     st.markdown("**💰 ÉCONOMIQUE**")
                     st.metric("Coût", formater_cout(ref['cout_minimal']))
-                    st.caption("✓ Travail interne\n✓ Templates gratuits\n✓ Outils gratuits")
+                    st.markdown("""
+                    **✓ Ce qui EST inclus:**
+                    - Travail 100% interne
+                    - Templates gratuits
+                    - Outils gratuits (Excel)
+                    - Formation en ligne
+                    - ÉFVP simplifiées
+                    
+                    **⚠️ Risque:** Plus de temps requis
+                    """)
                 
                 with col2:
                     st.markdown("**⭐ RECOMMANDÉE**")
                     st.metric("Coût", formater_cout(ref['cout_standard']))
-                    st.caption("✓ Mix interne/externe\n✓ Consultants GAP\n✓ MEILLEUR ROI")
+                    st.markdown("""
+                    **✓ Ce qui EST inclus:**
+                    - Consultant GAP analysis
+                    - Mix 60% interne / 40% externe
+                    - Outils standards
+                    - Formation mixte
+                    - ÉFVP 2-3 processus
+                    - Documentation complète
+                    
+                    **✓ MEILLEUR ROI**
+                    """)
                 
                 with col3:
                     st.markdown("**🏆 PREMIUM**")
                     st.metric("Coût", formater_cout(ref['cout_maximal']))
-                    st.caption("✓ Consultants seniors\n✓ Outils premium\n✓ Support 12 mois")
+                    st.markdown("""
+                    **✓ Ce qui EST inclus:**
+                    - Consultants seniors
+                    - Outils premium
+                    - Formation sur mesure
+                    - ÉFVP tous processus
+                    - Audits externes
+                    - Support 12 mois
+                    
+                    **→ Pour:** Grandes organisations
+                    """)
                 
                 # Tableau comparatif
-                st.markdown("##### Comparaison détaillée")
+                st.markdown("##### 📊 Comparaison détaillée")
                 df = pd.DataFrame({
                     'Poste': ['Coût initial', 'Économies existant', 'Optimisations', 'Premium +', 'TOTAL'],
                     'Économique': [
@@ -398,80 +456,89 @@ elif st.session_state.etape == 3:
     # Optionnels
     if recommandations['optionnels']:
         st.divider()
-        st.subheader("💡 Options pour plus tard - Non obligatoires")
+        st.subheader("💡 Recommandations pour plus tard - Non obligatoires")
+        
+        st.markdown("""
+        <div class="info-box">
+            <strong>💡 Ces référentiels ne sont pas obligatoires</strong> mais fortement recommandés pour améliorer votre posture de sécurité.
+        </div>
+        """, unsafe_allow_html=True)
         
         cols = st.columns(2)
         for idx, ref in enumerate(recommandations['optionnels']):
             with cols[idx % 2]:
-                st.markdown(f"""
-                <div style='border: 2px solid #3b82f6; background-color: #eff6ff; 
-                            padding: 1rem; border-radius: 0.5rem; margin-bottom: 1rem;'>
-                    <h4 style='margin: 0;'>{ref['name']}</h4>
-                    <p style='margin: 0.5rem 0; color: #6b7280;'>{ref['description']}</p>
-                    <div style='text-align: right; font-size: 1.2rem; font-weight: bold; color: #3b82f6;'>
-                        {formater_cout(ref['cout_standard'])}
+                with st.container():
+                    st.markdown(f"""
+                    <div style='background: #EFF6FF; padding: 1rem; border-radius: 0.5rem; border-left: 4px solid #3B82F6; margin-bottom: 1rem;'>
+                        <h4 style='color: #1E40AF; margin: 0 0 0.5rem 0;'>{ref['name']}</h4>
+                        <p style='color: #6B7280; font-size: 0.9rem; margin: 0 0 0.5rem 0;'>{ref['description']}</p>
+                        <p style='font-size: 1.2rem; font-weight: bold; color: #3B82F6; margin: 0;'>
+                            Coût: {formater_cout(ref['cout_standard'])}
+                        </p>
                     </div>
-                </div>
-                """, unsafe_allow_html=True)
+                    """, unsafe_allow_html=True)
+    
+    # Prochaines étapes
+    st.divider()
+    st.subheader("🎯 Prochaines étapes recommandées")
+    
+    st.markdown(f"""
+    **1. Validation budgétaire** - Budget recommandé: **{formater_cout(totaux['standard'])}**
+    
+    **2. Sélection consultants** - Obtenir 2-3 soumissions
+    
+    **3. Planification** - Calendrier 6-9 mois
+    
+    **4. Formation équipe** - Former 1-2 personnes clés
+    
+    **5. Lancement** - Débuter par analyse GAP
+    """)
     
     st.divider()
     
-    if st.button("🔄 Recommencer", use_container_width=True):
-        st.session_state.etape = 1
-        st.session_state.profil = {}
-        st.session_state.economies_selectionnees = []
-        st.rerun()
+    col1, col2 = st.columns(2)
+    with col1:
+        if st.button("🔄 Recommencer", use_container_width=True):
+            st.session_state.etape = 1
+            st.session_state.profil = {}
+            st.session_state.economies_selectionnees = []
+            st.rerun()
+    
+    with col2:
+        csv_data = pd.DataFrame(recommandations['obligatoires']).to_csv(index=False)
+        st.download_button(
+            label="📥 Télécharger rapport (CSV)",
+            data=csv_data,
+            file_name=f"recommandations_{datetime.now().strftime('%Y%m%d')}.csv",
+            mime="text/csv",
+            use_container_width=True
+        )
 
-# Sidebar avec info
+# ==================== SIDEBAR ====================
 with st.sidebar:
     st.markdown("### 📊 Assistant Conformité")
     st.markdown("**Version MVP 1.0**")
+    st.caption(f"Dernière mise à jour: {datetime.now().strftime('%d/%m/%Y')}")
+    
     st.divider()
     
     st.markdown("### ℹ️ À propos")
     st.info("""
     Cet outil vous aide à:
-    - ✅ Identifier vos obligations légales
-    - 💰 Calculer les coûts réels
-    - 📊 Optimiser votre budget
-    - 📋 Planifier l'implémentation
+    - ✅ Identifier obligations légales
+    - 💰 Calculer coûts réels
+    - 📊 Optimiser budget
+    - 📋 Planifier implémentation
     """)
     
-    if st.session_state.etape == 3:
-        st.divider()
-        st.markdown("### 📥 Actions")
-        
-        # Bouton export PDF
-        if st.button("📄 Télécharger rapport PDF", use_container_width=True, type="primary"):
-            with st.spinner("Génération du rapport PDF..."):
-                try:
-                    profil = st.session_state.profil
-                    economies_sel = st.session_state.economies_selectionnees
-                    total_economies = calculer_economies(economies_sel, data['economies'])
-                    obligatoires, optionnels = filtrer_referentiels_applicables(data['referentiels'], profil)
-                    recommandations = generer_recommandations(obligatoires, optionnels, total_economies, profil['budget'])
-                    
-                    pdf_buffer = generer_pdf_rapport(profil, recommandations, total_economies)
-                    
-                    st.download_button(
-                        label="💾 Enregistrer le PDF",
-                        data=pdf_buffer,
-                        file_name=f"rapport_conformite_{datetime.now().strftime('%Y%m%d')}.pdf",
-                        mime="application/pdf",
-                        use_container_width=True
-                    )
-                    st.success("✅ Rapport généré avec succès!")
-                except Exception as e:
-                    st.error(f"⚠️ Erreur lors de la génération: {str(e)}")
-    
     st.divider()
+    
     st.markdown("### 📞 Support")
     st.markdown("""
-    📧 contact@exemple.ca  
-    📞 1-800-XXX-XXXX  
-    🌐 www.exemple.ca
+    📧 contact@votre-entreprise.ca  
+    📞 514-XXX-XXXX  
+    🌐 www.votre-site.ca
     """)
     
     st.divider()
     st.caption(f"© 2026 - Tous droits réservés")
-
