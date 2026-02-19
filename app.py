@@ -1,7 +1,7 @@
-"""
+
 """
 Application Streamlit - Assistant de Conformité Cybersécurité
-Version Finale - Ajustements Couleurs
+Version Finale Sans Erreur
 """
 
 import streamlit as st
@@ -30,7 +30,9 @@ st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
-* { font-family: 'Inter', sans-serif; }
+* { 
+    font-family: 'Inter', sans-serif; 
+}
 
 .main-header {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -406,40 +408,46 @@ elif st.session_state.etape == 3:
     col1, col2, col3 = st.columns(3)
     
     with col1:
+        reste_min = formater_cout(budget_info['minimal']['reste']) if not budget_info['minimal']['depasse'] else formater_cout(budget_info['minimal']['montant_depassement'])
+        depasse_min = "⚠️ Dépasse:" if budget_info['minimal']['depasse'] else "✓ Reste:"
+        
         st.markdown(f"""
         <div style='background: linear-gradient(135deg, #10b981 0%, #059669 100%); 
                     padding: 2rem; border-radius: 1rem; color: white; text-align: center; box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);'>
             <div style='font-size: 1rem; font-weight: 600;'>💰 ÉCONOMIQUE</div>
             <div style='font-size: 2.5rem; font-weight: bold; margin: 0.5rem 0;'>{formater_cout(totaux['minimal'])}</div>
             <div style='font-size: 0.9rem; background: rgba(0,0,0,0.2); padding: 0.5rem; border-radius: 0.5rem; margin-top: 0.5rem;'>
-                {'✓ Reste: ' + formater_cout(budget_info['minimal']['reste']) if not budget_info['minimal']['depasse'] 
-                 else '⚠️ Dépasse: ' + formater_cout(budget_info['minimal']['montant_depassement'])}
+                {depasse_min} {reste_min}
             </div>
         </div>
         """, unsafe_allow_html=True)
     
     with col2:
+        reste_std = formater_cout(budget_info['standard']['reste']) if not budget_info['standard']['depasse'] else formater_cout(budget_info['standard']['montant_depassement'])
+        depasse_std = "⚠️ Dépasse:" if budget_info['standard']['depasse'] else "✓ Reste:"
+        
         st.markdown(f"""
         <div style='background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); 
                     padding: 2rem; border-radius: 1rem; color: white; text-align: center; border: 3px solid #1e40af; box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);'>
             <div style='font-size: 1rem; font-weight: 600;'>⭐ RECOMMANDÉE</div>
             <div style='font-size: 2.5rem; font-weight: bold; margin: 0.5rem 0;'>{formater_cout(totaux['standard'])}</div>
             <div style='font-size: 0.9rem; background: rgba(0,0,0,0.2); padding: 0.5rem; border-radius: 0.5rem; margin-top: 0.5rem;'>
-                {'✓ Reste: ' + formater_cout(budget_info['standard']['reste']) if not budget_info['standard']['depasse'] 
-                 else '⚠️ Dépasse: ' + formater_cout(budget_info['standard']['montant_depassement'])}
+                {depasse_std} {reste_std}
             </div>
         </div>
         """, unsafe_allow_html=True)
     
     with col3:
+        reste_max = formater_cout(budget_info['maximal']['reste']) if not budget_info['maximal']['depasse'] else formater_cout(budget_info['maximal']['montant_depassement'])
+        depasse_max = "⚠️ Dépasse:" if budget_info['maximal']['depasse'] else "✓ Reste:"
+        
         st.markdown(f"""
         <div style='background: linear-gradient(135deg, #a855f7 0%, #9333ea 100%); 
                     padding: 2rem; border-radius: 1rem; color: white; text-align: center; box-shadow: 0 8px 20px rgba(168, 85, 247, 0.3);'>
             <div style='font-size: 1rem; font-weight: 600;'>🏆 PREMIUM</div>
             <div style='font-size: 2.5rem; font-weight: bold; margin: 0.5rem 0;'>{formater_cout(totaux['maximal'])}</div>
             <div style='font-size: 0.9rem; background: rgba(0,0,0,0.2); padding: 0.5rem; border-radius: 0.5rem; margin-top: 0.5rem;'>
-                {'✓ Reste: ' + formater_cout(budget_info['maximal']['reste']) if not budget_info['maximal']['depasse'] 
-                 else '⚠️ Dépasse: ' + formater_cout(budget_info['maximal']['montant_depassement'])}
+                {depasse_max} {reste_max}
             </div>
         </div>
         """, unsafe_allow_html=True)
@@ -651,39 +659,45 @@ elif st.session_state.etape == 3:
     col1, col2, col3 = st.columns(3)
     
     with col1:
+        reste_min_resume = formater_cout(budget_info['minimal']['reste']) if not budget_info['minimal']['depasse'] else formater_cout(budget_info['minimal']['montant_depassement'])
+        depasse_min_resume = "⚠️ Dépasse:" if budget_info['minimal']['depasse'] else "✓ RESTE:"
+        
         st.markdown(f"""
         <div style='background: linear-gradient(135deg, #10B981 0%, #059669 100%); padding: 1.5rem; border-radius: 1rem; color: white; text-align: center; box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);'>
             <div style='font-size: 0.9rem; margin-bottom: 0.5rem; font-weight: 600;'>💰 Approche ÉCONOMIQUE</div>
             <div style='font-size: 2.5rem; font-weight: bold; margin: 0.5rem 0;'>{formater_cout(totaux['minimal'])}</div>
             <div style='background: rgba(0,0,0,0.2); padding: 0.5rem; border-radius: 0.3rem; margin-top: 0.5rem; font-size: 0.9rem;'>
-                {'✓ RESTE: ' + formater_cout(budget_info['minimal']['reste']) if not budget_info['minimal']['depasse'] 
-                 else '⚠️ Dépasse: ' + formater_cout(budget_info['minimal']['montant_depassement'])}
+                {depasse_min_resume} {reste_min_resume}
             </div>
             <div style='font-size: 0.85rem; margin-top: 0.5rem; opacity: 0.95;'>Travail interne, templates gratuits</div>
         </div>
         """, unsafe_allow_html=True)
     
     with col2:
+        reste_std_resume = formater_cout(budget_info['standard']['reste']) if not budget_info['standard']['depasse'] else formater_cout(budget_info['standard']['montant_depassement'])
+        depasse_std_resume = "⚠️ Dépasse:" if budget_info['standard']['depasse'] else "✓ RESTE:"
+        
         st.markdown(f"""
         <div style='background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%); padding: 1.5rem; border-radius: 1rem; color: white; text-align: center; border: 3px solid #1E40AF; box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);'>
             <div style='font-size: 0.9rem; margin-bottom: 0.5rem; font-weight: 600;'>⭐ Approche RECOMMANDÉE</div>
             <div style='font-size: 2.5rem; font-weight: bold; margin: 0.5rem 0;'>{formater_cout(totaux['standard'])}</div>
             <div style='background: rgba(0,0,0,0.2); padding: 0.5rem; border-radius: 0.3rem; margin-top: 0.5rem; font-size: 0.9rem;'>
-                {'✓ RESTE: ' + formater_cout(budget_info['standard']['reste']) if not budget_info['standard']['depasse'] 
-                 else '⚠️ Dépasse: ' + formater_cout(budget_info['standard']['montant_depassement'])}
+                {depasse_std_resume} {reste_std_resume}
             </div>
             <div style='font-size: 0.85rem; margin-top: 0.5rem; opacity: 0.95;'>Mix interne/externe, meilleur ROI</div>
         </div>
         """, unsafe_allow_html=True)
     
     with col3:
+        reste_max_resume = formater_cout(budget_info['maximal']['reste']) if not budget_info['maximal']['depasse'] else formater_cout(budget_info['maximal']['montant_depassement'])
+        depasse_max_resume = "⚠️ Dépasse:" if budget_info['maximal']['depasse'] else "✓ RESTE:"
+        
         st.markdown(f"""
         <div style='background: linear-gradient(135deg, #A855F7 0%, #9333EA 100%); padding: 1.5rem; border-radius: 1rem; color: white; text-align: center; box-shadow: 0 8px 20px rgba(168, 85, 247, 0.3);'>
             <div style='font-size: 0.9rem; margin-bottom: 0.5rem; font-weight: 600;'>🏆 Approche PREMIUM</div>
             <div style='font-size: 2.5rem; font-weight: bold; margin: 0.5rem 0;'>{formater_cout(totaux['maximal'])}</div>
             <div style='background: rgba(0,0,0,0.2); padding: 0.5rem; border-radius: 0.3rem; margin-top: 0.5rem; font-size: 0.9rem;'>
-                {'✓ RESTE: ' + formater_cout(budget_info['maximal']['reste']) if not budget_info['maximal']['depasse'] 
-                 else '⚠️ Dépasse: ' + formater_cout(budget_info['maximal']['montant_depassement'])}
+                {depasse_max_resume} {reste_max_resume}
             </div>
             <div style='font-size: 0.85rem; margin-top: 0.5rem; opacity: 0.95;'>Consultants seniors, outils premium</div>
         </div>
