@@ -1,6 +1,7 @@
 """
+"""
 Application Streamlit - Assistant de Conformité Cybersécurité
-Version Complète et Professionnelle
+Version Finale - Ajustements Couleurs
 """
 
 import streamlit as st
@@ -60,6 +61,11 @@ st.markdown("""
     margin: 1rem 0;
     font-size: 0.95rem;
     line-height: 1.6;
+    color: #1F2937;
+}
+
+.info-box strong {
+    color: #1F2937;
 }
 
 .warning-box {
@@ -68,6 +74,11 @@ st.markdown("""
     padding: 1.5rem;
     border-radius: 0.75rem;
     margin: 1.5rem 0;
+    color: #78350F;
+}
+
+.warning-box strong {
+    color: #78350F;
 }
 
 .success-box {
@@ -467,7 +478,7 @@ elif st.session_state.etape == 3:
                     </div>
                     <div style='font-size: 0.9rem; color: #1F2937;'>
                         <strong style='color: #10B981;'>✓ Ce qui EST inclus:</strong><br>
-                        <ul style='margin: 0.5rem 0; padding-left: 1.2rem;'>
+                        <ul style='margin: 0.5rem 0; padding-left: 1.2rem; color: #1F2937;'>
                             <li>Travail 100% interne</li>
                             <li>Templates gratuits (CAI)</li>
                             <li>Outils Excel/Google</li>
@@ -475,14 +486,14 @@ elif st.session_state.etape == 3:
                             <li>ÉFVP simplifiées</li>
                         </ul>
                         <strong style='color: #F59E0B;'>✗ Ce qui MANQUE:</strong><br>
-                        <ul style='margin: 0.5rem 0; padding-left: 1.2rem;'>
+                        <ul style='margin: 0.5rem 0; padding-left: 1.2rem; color: #1F2937;'>
                             <li>Consultants externes</li>
                             <li>Outils automatisés</li>
                             <li>Formation présentielle</li>
                             <li>Audits externes</li>
                         </ul>
-                        <div style='background: #FEF3C7; padding: 0.75rem; border-radius: 0.5rem; margin-top: 1rem; border-left: 3px solid #F59E0B;'>
-                            <strong style='color: #92400E;'>⚠️ Risque:</strong> Plus de temps requis (9-12 mois)
+                        <div style='background: #FEF3C7; padding: 0.75rem; border-radius: 0.5rem; margin-top: 1rem; border-left: 3px solid #F59E0B; color: #92400E;'>
+                            <strong>⚠️ Risque:</strong> Plus de temps requis (9-12 mois)
                         </div>
                     </div>
                 </div>
@@ -497,7 +508,7 @@ elif st.session_state.etape == 3:
                     </div>
                     <div style='font-size: 0.9rem; color: #1F2937;'>
                         <strong style='color: #3B82F6;'>✓ Ce qui EST inclus:</strong><br>
-                        <ul style='margin: 0.5rem 0; padding-left: 1.2rem;'>
+                        <ul style='margin: 0.5rem 0; padding-left: 1.2rem; color: #1F2937;'>
                             <li>Consultant GAP analysis</li>
                             <li>Mix 60% interne / 40% externe</li>
                             <li>Outils standards conformité</li>
@@ -506,13 +517,13 @@ elif st.session_state.etape == 3:
                             <li>Documentation complète</li>
                         </ul>
                         <strong style='color: #10B981;'>💡 Pourquoi choisir:</strong><br>
-                        <ul style='margin: 0.5rem 0; padding-left: 1.2rem;'>
+                        <ul style='margin: 0.5rem 0; padding-left: 1.2rem; color: #1F2937;'>
                             <li>Équilibre coût/qualité optimal</li>
                             <li>Expertise externe ciblée</li>
                             <li>Conformité solide et durable</li>
                         </ul>
-                        <div style='background: #D1FAE5; padding: 0.75rem; border-radius: 0.5rem; margin-top: 1rem; border-left: 3px solid #10B981;'>
-                            <strong style='color: #065F46;'>✓ MEILLEUR ROI</strong> selon nos analyses
+                        <div style='background: #D1FAE5; padding: 0.75rem; border-radius: 0.5rem; margin-top: 1rem; border-left: 3px solid #10B981; color: #065F46;'>
+                            <strong>✓ MEILLEUR ROI</strong> selon nos analyses
                         </div>
                     </div>
                 </div>
@@ -527,7 +538,7 @@ elif st.session_state.etape == 3:
                     </div>
                     <div style='font-size: 0.9rem; color: #1F2937;'>
                         <strong style='color: #A855F7;'>✓ Ce qui EST inclus:</strong><br>
-                        <ul style='margin: 0.5rem 0; padding-left: 1.2rem;'>
+                        <ul style='margin: 0.5rem 0; padding-left: 1.2rem; color: #1F2937;'>
                             <li>Consultants seniors dédiés</li>
                             <li>Outils automatisés premium</li>
                             <li>Formation sur mesure présentielle</li>
@@ -537,7 +548,7 @@ elif st.session_state.etape == 3:
                             <li>Certification/attestation</li>
                         </ul>
                         <strong style='color: #A855F7;'>💎 Avantages:</strong><br>
-                        <ul style='margin: 0.5rem 0; padding-left: 1.2rem;'>
+                        <ul style='margin: 0.5rem 0; padding-left: 1.2rem; color: #1F2937;'>
                             <li>Implémentation plus rapide (3-6 mois)</li>
                             <li>Risque minimisé</li>
                             <li>Excellence garantie</li>
@@ -580,58 +591,52 @@ elif st.session_state.etape == 3:
                 
                 with tab1:
                     st.markdown("""
-                    <div style='background: #F0FDF4; padding: 1.5rem; border-radius: 0.5rem; border-left: 4px solid #10B981;'>
-                        <h4 style='color: #065F46; margin-top: 0;'>⚠️ Version minimale - Strict essentiel uniquement</h4>
-                        <p><strong>Substitutions pour réduire les coûts:</strong></p>
-                        <ul>
-                            <li>Consultants externes → <strong>Travail 100% interne</strong></li>
-                            <li>Formation complète → <strong>Formation de base gratuite en ligne</strong></li>
-                            <li>Outils automatisés → <strong>Excel et documents Word</strong></li>
-                            <li>Audits externes → <strong>Auto-évaluations internes</strong></li>
-                        </ul>
-                        <p><strong>⏱️ Délai:</strong> 9-12 mois</p>
-                        <p><strong>👥 Ressources:</strong> 1-2 personnes internes à temps partiel</p>
-                    </div>
-                    """, unsafe_allow_html=True)
+                    ### ⚠️ Version minimale - Strict essentiel uniquement
+                    
+                    **Substitutions pour réduire les coûts:**
+                    - Consultants externes → **Travail 100% interne**
+                    - Formation complète → **Formation de base gratuite en ligne**
+                    - Outils automatisés → **Excel et documents Word**
+                    - Audits externes → **Auto-évaluations internes**
+                    
+                    **⏱️ Délai:** 9-12 mois  
+                    **👥 Ressources:** 1-2 personnes internes à temps partiel
+                    """)
                 
                 with tab2:
                     st.markdown("""
-                    <div style='background: #EFF6FF; padding: 1.5rem; border-radius: 0.5rem; border-left: 4px solid #3B82F6;'>
-                        <h4 style='color: #1E40AF; margin-top: 0;'>⭐ Version recommandée - Équilibre optimal</h4>
-                        <p><strong>Mix optimal 60% interne / 40% externe:</strong></p>
-                        <ul>
-                            <li><strong>Consultant externe:</strong> GAP analysis initiale (2-3 semaines)</li>
-                            <li><strong>Équipe interne:</strong> Mise en œuvre quotidienne</li>
-                            <li><strong>Outils:</strong> Standards de conformité (Vanta, Drata, ou similaire)</li>
-                            <li><strong>Formation:</strong> Mixte en ligne + 2-3 sessions présentielles</li>
-                            <li><strong>ÉFVP:</strong> Sur 2-3 processus critiques avec support consultant</li>
-                            <li><strong>Documentation:</strong> Templates professionnels + personnalisation</li>
-                        </ul>
-                        <p><strong>⏱️ Délai:</strong> 6-9 mois</p>
-                        <p><strong>👥 Ressources:</strong> 2-3 personnes internes + consultant ponctuel</p>
-                        <p><strong>✓ MEILLEUR RAPPORT QUALITÉ/PRIX</strong></p>
-                    </div>
-                    """, unsafe_allow_html=True)
+                    ### ⭐ Version recommandée - Équilibre optimal
+                    
+                    **Mix optimal 60% interne / 40% externe:**
+                    - **Consultant externe:** GAP analysis initiale (2-3 semaines)
+                    - **Équipe interne:** Mise en œuvre quotidienne
+                    - **Outils:** Standards de conformité (Vanta, Drata, ou similaire)
+                    - **Formation:** Mixte en ligne + 2-3 sessions présentielles
+                    - **ÉFVP:** Sur 2-3 processus critiques avec support consultant
+                    - **Documentation:** Templates professionnels + personnalisation
+                    
+                    **⏱️ Délai:** 6-9 mois  
+                    **👥 Ressources:** 2-3 personnes internes + consultant ponctuel  
+                    **✓ MEILLEUR RAPPORT QUALITÉ/PRIX**
+                    """)
                 
                 with tab3:
                     st.markdown("""
-                    <div style='background: #FAF5FF; padding: 1.5rem; border-radius: 0.5rem; border-left: 4px solid #A855F7;'>
-                        <h4 style='color: #7C3AED; margin-top: 0;'>🏆 Version premium - Excellence garantie</h4>
-                        <p><strong>Package complet clés en main:</strong></p>
-                        <ul>
-                            <li><strong>Consultants seniors dédiés:</strong> Équipe de 2-3 experts assignés</li>
-                            <li><strong>Outils premium:</strong> Suite automatisée complète (OneTrust, ServiceNow, etc.)</li>
-                            <li><strong>Formation sur mesure:</strong> Programme présentiel personnalisé</li>
-                            <li><strong>ÉFVP approfondies:</strong> Tous les processus analysés en détail</li>
-                            <li><strong>Audits externes:</strong> Vérification par organisme certifié</li>
-                            <li><strong>Support continu:</strong> 12 mois post-implémentation</li>
-                            <li><strong>Certification:</strong> Préparation et obtention certification officielle</li>
-                        </ul>
-                        <p><strong>⏱️ Délai:</strong> 3-6 mois</p>
-                        <p><strong>👥 Ressources:</strong> Équipe consultants + 1 personne interne coordination</p>
-                        <p><strong>→ Pour:</strong> Grandes organisations, secteurs hautement réglementés</p>
-                    </div>
-                    """, unsafe_allow_html=True)
+                    ### 🏆 Version premium - Excellence garantie
+                    
+                    **Package complet clés en main:**
+                    - **Consultants seniors dédiés:** Équipe de 2-3 experts assignés
+                    - **Outils premium:** Suite automatisée complète (OneTrust, ServiceNow, etc.)
+                    - **Formation sur mesure:** Programme présentiel personnalisé
+                    - **ÉFVP approfondies:** Tous les processus analysés en détail
+                    - **Audits externes:** Vérification par organisme certifié
+                    - **Support continu:** 12 mois post-implémentation
+                    - **Certification:** Préparation et obtention certification officielle
+                    
+                    **⏱️ Délai:** 3-6 mois  
+                    **👥 Ressources:** Équipe consultants + 1 personne interne coordination  
+                    **→ Pour:** Grandes organisations, secteurs hautement réglementés
+                    """)
             
             st.markdown("<br>", unsafe_allow_html=True)
     
