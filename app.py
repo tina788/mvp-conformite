@@ -352,15 +352,55 @@ elif st.session_state.etape == 3:
     
     st.markdown("### 📊 Vue d'ensemble - 3 approches")
     
+    # GRAPHIQUE COMPARATIF
+    fig = go.Figure()
+    
+    approaches = ['💰 Économique', '⭐ Recommandée', '🏆 Premium']
+    costs = [totaux['minimal'], totaux['standard'], totaux['maximal']]
+    colors = ['#10B981', '#3B82F6', '#A855F7']
+    
+    fig.add_trace(go.Bar(
+        x=approaches,
+        y=costs,
+        marker_color=colors,
+        text=[formater_cout(c) for c in costs],
+        textposition='auto',
+        textfont=dict(size=16, color='white', family='Inter')
+    ))
+    
+    fig.add_hline(
+        y=budget_info['montant'], 
+        line_dash="dash", 
+        line_color="#EF4444", 
+        line_width=3,
+        annotation_text=f"Budget: {formater_cout(budget_info['montant'])}", 
+        annotation_position="right"
+    )
+    
+    fig.update_layout(
+        title="Comparaison des 3 approches vs votre budget",
+        yaxis_title="Coût ($)",
+        height=400,
+        showlegend=False,
+        plot_bgcolor='rgba(0,0,0,0)',
+        paper_bgcolor='rgba(0,0,0,0)',
+        font=dict(family='Inter', size=12)
+    )
+    
+    st.plotly_chart(fig, use_container_width=True)
+    
+    st.markdown("<br>", unsafe_allow_html=True)
+    
+    # 3 Cartes des approches
     col1, col2, col3 = st.columns(3)
     
     with col1:
         st.markdown(f"""
         <div style='background: linear-gradient(135deg, #10b981 0%, #059669 100%); 
-                    padding: 2rem; border-radius: 1rem; color: white; text-align: center;'>
-            <div style='font-size: 1rem;'>💰 ÉCONOMIQUE</div>
+                    padding: 2rem; border-radius: 1rem; color: white; text-align: center; box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);'>
+            <div style='font-size: 1rem; font-weight: 600;'>💰 ÉCONOMIQUE</div>
             <div style='font-size: 2.5rem; font-weight: bold; margin: 0.5rem 0;'>{formater_cout(totaux['minimal'])}</div>
-            <div style='font-size: 0.9rem;'>
+            <div style='font-size: 0.9rem; background: rgba(0,0,0,0.2); padding: 0.5rem; border-radius: 0.5rem; margin-top: 0.5rem;'>
                 {'✓ Reste: ' + formater_cout(budget_info['minimal']['reste']) if not budget_info['minimal']['depasse'] 
                  else '⚠️ Dépasse: ' + formater_cout(budget_info['minimal']['montant_depassement'])}
             </div>
@@ -370,10 +410,10 @@ elif st.session_state.etape == 3:
     with col2:
         st.markdown(f"""
         <div style='background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); 
-                    padding: 2rem; border-radius: 1rem; color: white; text-align: center; border: 3px solid #1e40af;'>
-            <div style='font-size: 1rem;'>⭐ RECOMMANDÉE</div>
+                    padding: 2rem; border-radius: 1rem; color: white; text-align: center; border: 3px solid #1e40af; box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);'>
+            <div style='font-size: 1rem; font-weight: 600;'>⭐ RECOMMANDÉE</div>
             <div style='font-size: 2.5rem; font-weight: bold; margin: 0.5rem 0;'>{formater_cout(totaux['standard'])}</div>
-            <div style='font-size: 0.9rem;'>
+            <div style='font-size: 0.9rem; background: rgba(0,0,0,0.2); padding: 0.5rem; border-radius: 0.5rem; margin-top: 0.5rem;'>
                 {'✓ Reste: ' + formater_cout(budget_info['standard']['reste']) if not budget_info['standard']['depasse'] 
                  else '⚠️ Dépasse: ' + formater_cout(budget_info['standard']['montant_depassement'])}
             </div>
@@ -383,10 +423,10 @@ elif st.session_state.etape == 3:
     with col3:
         st.markdown(f"""
         <div style='background: linear-gradient(135deg, #a855f7 0%, #9333ea 100%); 
-                    padding: 2rem; border-radius: 1rem; color: white; text-align: center;'>
-            <div style='font-size: 1rem;'>🏆 PREMIUM</div>
+                    padding: 2rem; border-radius: 1rem; color: white; text-align: center; box-shadow: 0 8px 20px rgba(168, 85, 247, 0.3);'>
+            <div style='font-size: 1rem; font-weight: 600;'>🏆 PREMIUM</div>
             <div style='font-size: 2.5rem; font-weight: bold; margin: 0.5rem 0;'>{formater_cout(totaux['maximal'])}</div>
-            <div style='font-size: 0.9rem;'>
+            <div style='font-size: 0.9rem; background: rgba(0,0,0,0.2); padding: 0.5rem; border-radius: 0.5rem; margin-top: 0.5rem;'>
                 {'✓ Reste: ' + formater_cout(budget_info['maximal']['reste']) if not budget_info['maximal']['depasse'] 
                  else '⚠️ Dépasse: ' + formater_cout(budget_info['maximal']['montant_depassement'])}
             </div>
@@ -401,16 +441,16 @@ elif st.session_state.etape == 3:
         
         st.markdown("""
         <div class="warning-box">
-            <strong>⚠️ Attention:</strong> Ces référentiels sont OBLIGATOIRES.
+            <strong>⚠️ Attention:</strong> Ces référentiels sont OBLIGATOIRES selon votre profil.
         </div>
         """, unsafe_allow_html=True)
         
         for idx, ref in enumerate(recommandations['obligatoires'], 1):
             st.markdown(f"""
             <div class="ref-card">
-                <h3 style='margin: 0 0 0.5rem 0;'>{idx}. {ref['name']} 
+                <h3 style='margin: 0 0 0.5rem 0; color: #1F2937;'>{idx}. {ref['name']} 
                 <span class='badge badge-mandatory'>⚠️ OBLIGATOIRE</span></h3>
-                <p style='color: #6B7280;'>{ref['description']}</p>
+                <p style='color: #6B7280; margin: 0;'>{ref['description']}</p>
             </div>
             """, unsafe_allow_html=True)
             
@@ -420,72 +460,88 @@ elif st.session_state.etape == 3:
             
             with col1:
                 st.markdown(f"""
-                <div style='background: #DEF7EC; padding: 1rem; border-radius: 0.5rem; border: 2px solid #10B981;'>
-                    <div style='text-align: center; background: #10B981; color: white; padding: 0.5rem; border-radius: 0.3rem; margin-bottom: 0.5rem;'>
-                        <div style='font-size: 0.8rem;'>💰 APPROCHE ÉCONOMIQUE</div>
-                        <div style='font-size: 1.8rem; font-weight: bold;'>{formater_cout(ref['cout_minimal'])}</div>
+                <div style='background: #F0FDF4; padding: 1.5rem; border-radius: 0.75rem; border: 2px solid #10B981; box-shadow: 0 2px 8px rgba(16, 185, 129, 0.15);'>
+                    <div style='text-align: center; background: #10B981; color: white; padding: 0.75rem; border-radius: 0.5rem; margin-bottom: 1rem;'>
+                        <div style='font-size: 0.85rem; font-weight: 600;'>💰 APPROCHE ÉCONOMIQUE</div>
+                        <div style='font-size: 2rem; font-weight: bold;'>{formater_cout(ref['cout_minimal'])}</div>
                     </div>
-                    <div style='font-size: 0.85rem;'>
-                        <strong>✓ Ce qui EST inclus:</strong><br>
-                        • Travail 100% interne<br>
-                        • Templates gratuits<br>
-                        • Outils Excel/Google<br>
-                        • Formation en ligne<br>
-                        • ÉFVP simplifiées<br><br>
+                    <div style='font-size: 0.9rem; color: #1F2937;'>
+                        <strong style='color: #10B981;'>✓ Ce qui EST inclus:</strong><br>
+                        <ul style='margin: 0.5rem 0; padding-left: 1.2rem;'>
+                            <li>Travail 100% interne</li>
+                            <li>Templates gratuits (CAI)</li>
+                            <li>Outils Excel/Google</li>
+                            <li>Formation en ligne</li>
+                            <li>ÉFVP simplifiées</li>
+                        </ul>
                         <strong style='color: #F59E0B;'>✗ Ce qui MANQUE:</strong><br>
-                        • Consultants externes<br>
-                        • Outils automatisés<br>
-                        • Formation présentielle<br>
-                        • Audits externes<br><br>
-                        <strong style='color: #EF4444;'>⚠️ Risque:</strong> Plus de temps requis
+                        <ul style='margin: 0.5rem 0; padding-left: 1.2rem;'>
+                            <li>Consultants externes</li>
+                            <li>Outils automatisés</li>
+                            <li>Formation présentielle</li>
+                            <li>Audits externes</li>
+                        </ul>
+                        <div style='background: #FEF3C7; padding: 0.75rem; border-radius: 0.5rem; margin-top: 1rem; border-left: 3px solid #F59E0B;'>
+                            <strong style='color: #92400E;'>⚠️ Risque:</strong> Plus de temps requis (9-12 mois)
+                        </div>
                     </div>
                 </div>
                 """, unsafe_allow_html=True)
             
             with col2:
                 st.markdown(f"""
-                <div style='background: #DBEAFE; padding: 1rem; border-radius: 0.5rem; border: 2px solid #3B82F6;'>
-                    <div style='text-align: center; background: #3B82F6; color: white; padding: 0.5rem; border-radius: 0.3rem; margin-bottom: 0.5rem;'>
-                        <div style='font-size: 0.8rem;'>⭐ APPROCHE RECOMMANDÉE</div>
-                        <div style='font-size: 1.8rem; font-weight: bold;'>{formater_cout(ref['cout_standard'])}</div>
+                <div style='background: #EFF6FF; padding: 1.5rem; border-radius: 0.75rem; border: 2px solid #3B82F6; box-shadow: 0 2px 8px rgba(59, 130, 246, 0.15);'>
+                    <div style='text-align: center; background: #3B82F6; color: white; padding: 0.75rem; border-radius: 0.5rem; margin-bottom: 1rem;'>
+                        <div style='font-size: 0.85rem; font-weight: 600;'>⭐ APPROCHE RECOMMANDÉE</div>
+                        <div style='font-size: 2rem; font-weight: bold;'>{formater_cout(ref['cout_standard'])}</div>
                     </div>
-                    <div style='font-size: 0.85rem;'>
-                        <strong>✓ Ce qui EST inclus:</strong><br>
-                        • Consultant GAP analysis<br>
-                        • Mix interne/externe<br>
-                        • Outils standards<br>
-                        • Formation mixte<br>
-                        • ÉFVP 2-3 processus<br>
-                        • Documentation complète<br><br>
-                        <strong style='color: #10B981;'>💡 Pourquoi:</strong><br>
-                        • Équilibre optimal<br>
-                        • Expertise ciblée<br>
-                        • Conformité solide<br><br>
-                        <strong style='color: #10B981;'>✓ MEILLEUR ROI</strong>
+                    <div style='font-size: 0.9rem; color: #1F2937;'>
+                        <strong style='color: #3B82F6;'>✓ Ce qui EST inclus:</strong><br>
+                        <ul style='margin: 0.5rem 0; padding-left: 1.2rem;'>
+                            <li>Consultant GAP analysis</li>
+                            <li>Mix 60% interne / 40% externe</li>
+                            <li>Outils standards conformité</li>
+                            <li>Formation mixte</li>
+                            <li>ÉFVP 2-3 processus critiques</li>
+                            <li>Documentation complète</li>
+                        </ul>
+                        <strong style='color: #10B981;'>💡 Pourquoi choisir:</strong><br>
+                        <ul style='margin: 0.5rem 0; padding-left: 1.2rem;'>
+                            <li>Équilibre coût/qualité optimal</li>
+                            <li>Expertise externe ciblée</li>
+                            <li>Conformité solide et durable</li>
+                        </ul>
+                        <div style='background: #D1FAE5; padding: 0.75rem; border-radius: 0.5rem; margin-top: 1rem; border-left: 3px solid #10B981;'>
+                            <strong style='color: #065F46;'>✓ MEILLEUR ROI</strong> selon nos analyses
+                        </div>
                     </div>
                 </div>
                 """, unsafe_allow_html=True)
             
             with col3:
                 st.markdown(f"""
-                <div style='background: #F3E8FF; padding: 1rem; border-radius: 0.5rem; border: 2px solid #A855F7;'>
-                    <div style='text-align: center; background: #A855F7; color: white; padding: 0.5rem; border-radius: 0.3rem; margin-bottom: 0.5rem;'>
-                        <div style='font-size: 0.8rem;'>🏆 APPROCHE PREMIUM</div>
-                        <div style='font-size: 1.8rem; font-weight: bold;'>{formater_cout(ref['cout_maximal'])}</div>
+                <div style='background: #FAF5FF; padding: 1.5rem; border-radius: 0.75rem; border: 2px solid #A855F7; box-shadow: 0 2px 8px rgba(168, 85, 247, 0.15);'>
+                    <div style='text-align: center; background: #A855F7; color: white; padding: 0.75rem; border-radius: 0.5rem; margin-bottom: 1rem;'>
+                        <div style='font-size: 0.85rem; font-weight: 600;'>🏆 APPROCHE PREMIUM</div>
+                        <div style='font-size: 2rem; font-weight: bold;'>{formater_cout(ref['cout_maximal'])}</div>
                     </div>
-                    <div style='font-size: 0.85rem;'>
-                        <strong>✓ Ce qui EST inclus:</strong><br>
-                        • Consultants seniors<br>
-                        • Outils premium<br>
-                        • Formation sur mesure<br>
-                        • ÉFVP tous processus<br>
-                        • Audits complets<br>
-                        • Support 12 mois<br>
-                        • Certification<br><br>
+                    <div style='font-size: 0.9rem; color: #1F2937;'>
+                        <strong style='color: #A855F7;'>✓ Ce qui EST inclus:</strong><br>
+                        <ul style='margin: 0.5rem 0; padding-left: 1.2rem;'>
+                            <li>Consultants seniors dédiés</li>
+                            <li>Outils automatisés premium</li>
+                            <li>Formation sur mesure présentielle</li>
+                            <li>ÉFVP approfondies tous processus</li>
+                            <li>Audits externes complets</li>
+                            <li>Support continu 12 mois</li>
+                            <li>Certification/attestation</li>
+                        </ul>
                         <strong style='color: #A855F7;'>💎 Avantages:</strong><br>
-                        • Plus rapide<br>
-                        • Risque minimal<br>
-                        • Excellence garantie
+                        <ul style='margin: 0.5rem 0; padding-left: 1.2rem;'>
+                            <li>Implémentation plus rapide (3-6 mois)</li>
+                            <li>Risque minimisé</li>
+                            <li>Excellence garantie</li>
+                        </ul>
                     </div>
                 </div>
                 """, unsafe_allow_html=True)
@@ -518,32 +574,64 @@ elif st.session_state.etape == 3:
             })
             st.dataframe(df, use_container_width=True, hide_index=True)
             
-            # DÉTAILS: Ce qui doit être mis en place
+            # DÉTAILS amélioré
             with st.expander("📋 **DÉTAILS: Ce qui doit être mis en place** (cliquez pour voir)", expanded=False):
-                st.markdown("""
-                **⚠️ Version minimale:**
-                • Consultants externes → Travail interne
-                • Formation complète → Formation de base
-                • Outils automatisés → Excel et documents
-                • À compléter dans 6-12 mois
+                tab1, tab2, tab3 = st.tabs(["💰 Version minimale", "⭐ Version recommandée", "🏆 Version premium"])
                 
-                **⭐ Version recommandée:**
-                • Mix 60% interne / 40% externe
-                • Consultant pour GAP analysis initiale
-                • Outils standards de conformité
-                • Formation mixte (en ligne + présentiel)
-                • ÉFVP sur 2-3 processus critiques
-                • À compléter dans 4-6 mois
+                with tab1:
+                    st.markdown("""
+                    <div style='background: #F0FDF4; padding: 1.5rem; border-radius: 0.5rem; border-left: 4px solid #10B981;'>
+                        <h4 style='color: #065F46; margin-top: 0;'>⚠️ Version minimale - Strict essentiel uniquement</h4>
+                        <p><strong>Substitutions pour réduire les coûts:</strong></p>
+                        <ul>
+                            <li>Consultants externes → <strong>Travail 100% interne</strong></li>
+                            <li>Formation complète → <strong>Formation de base gratuite en ligne</strong></li>
+                            <li>Outils automatisés → <strong>Excel et documents Word</strong></li>
+                            <li>Audits externes → <strong>Auto-évaluations internes</strong></li>
+                        </ul>
+                        <p><strong>⏱️ Délai:</strong> 9-12 mois</p>
+                        <p><strong>👥 Ressources:</strong> 1-2 personnes internes à temps partiel</p>
+                    </div>
+                    """, unsafe_allow_html=True)
                 
-                **🏆 Version premium:**
-                • Consultants seniors dédiés
-                • Outils automatisés premium
-                • Formation sur mesure présentielle
-                • ÉFVP approfondies tous processus
-                • Audits externes complets
-                • Support continu 12 mois
-                • À compléter dans 3-4 mois
-                """)
+                with tab2:
+                    st.markdown("""
+                    <div style='background: #EFF6FF; padding: 1.5rem; border-radius: 0.5rem; border-left: 4px solid #3B82F6;'>
+                        <h4 style='color: #1E40AF; margin-top: 0;'>⭐ Version recommandée - Équilibre optimal</h4>
+                        <p><strong>Mix optimal 60% interne / 40% externe:</strong></p>
+                        <ul>
+                            <li><strong>Consultant externe:</strong> GAP analysis initiale (2-3 semaines)</li>
+                            <li><strong>Équipe interne:</strong> Mise en œuvre quotidienne</li>
+                            <li><strong>Outils:</strong> Standards de conformité (Vanta, Drata, ou similaire)</li>
+                            <li><strong>Formation:</strong> Mixte en ligne + 2-3 sessions présentielles</li>
+                            <li><strong>ÉFVP:</strong> Sur 2-3 processus critiques avec support consultant</li>
+                            <li><strong>Documentation:</strong> Templates professionnels + personnalisation</li>
+                        </ul>
+                        <p><strong>⏱️ Délai:</strong> 6-9 mois</p>
+                        <p><strong>👥 Ressources:</strong> 2-3 personnes internes + consultant ponctuel</p>
+                        <p><strong>✓ MEILLEUR RAPPORT QUALITÉ/PRIX</strong></p>
+                    </div>
+                    """, unsafe_allow_html=True)
+                
+                with tab3:
+                    st.markdown("""
+                    <div style='background: #FAF5FF; padding: 1.5rem; border-radius: 0.5rem; border-left: 4px solid #A855F7;'>
+                        <h4 style='color: #7C3AED; margin-top: 0;'>🏆 Version premium - Excellence garantie</h4>
+                        <p><strong>Package complet clés en main:</strong></p>
+                        <ul>
+                            <li><strong>Consultants seniors dédiés:</strong> Équipe de 2-3 experts assignés</li>
+                            <li><strong>Outils premium:</strong> Suite automatisée complète (OneTrust, ServiceNow, etc.)</li>
+                            <li><strong>Formation sur mesure:</strong> Programme présentiel personnalisé</li>
+                            <li><strong>ÉFVP approfondies:</strong> Tous les processus analysés en détail</li>
+                            <li><strong>Audits externes:</strong> Vérification par organisme certifié</li>
+                            <li><strong>Support continu:</strong> 12 mois post-implémentation</li>
+                            <li><strong>Certification:</strong> Préparation et obtention certification officielle</li>
+                        </ul>
+                        <p><strong>⏱️ Délai:</strong> 3-6 mois</p>
+                        <p><strong>👥 Ressources:</strong> Équipe consultants + 1 personne interne coordination</p>
+                        <p><strong>→ Pour:</strong> Grandes organisations, secteurs hautement réglementés</p>
+                    </div>
+                    """, unsafe_allow_html=True)
             
             st.markdown("<br>", unsafe_allow_html=True)
     
@@ -559,40 +647,40 @@ elif st.session_state.etape == 3:
     
     with col1:
         st.markdown(f"""
-        <div style='background: linear-gradient(135deg, #8B5CF6 0%, #7C3AED 100%); padding: 1.5rem; border-radius: 1rem; color: white; text-align: center;'>
-            <div style='font-size: 0.9rem; margin-bottom: 0.5rem;'>💰 Approche ÉCONOMIQUE</div>
+        <div style='background: linear-gradient(135deg, #10B981 0%, #059669 100%); padding: 1.5rem; border-radius: 1rem; color: white; text-align: center; box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);'>
+            <div style='font-size: 0.9rem; margin-bottom: 0.5rem; font-weight: 600;'>💰 Approche ÉCONOMIQUE</div>
             <div style='font-size: 2.5rem; font-weight: bold; margin: 0.5rem 0;'>{formater_cout(totaux['minimal'])}</div>
-            <div style='background: rgba(255,255,255,0.2); padding: 0.5rem; border-radius: 0.3rem; margin-top: 0.5rem;'>
+            <div style='background: rgba(0,0,0,0.2); padding: 0.5rem; border-radius: 0.3rem; margin-top: 0.5rem; font-size: 0.9rem;'>
                 {'✓ RESTE: ' + formater_cout(budget_info['minimal']['reste']) if not budget_info['minimal']['depasse'] 
                  else '⚠️ Dépasse: ' + formater_cout(budget_info['minimal']['montant_depassement'])}
             </div>
-            <div style='font-size: 0.85rem; margin-top: 0.5rem; opacity: 0.9;'>Travail interne, templates gratuits</div>
+            <div style='font-size: 0.85rem; margin-top: 0.5rem; opacity: 0.95;'>Travail interne, templates gratuits</div>
         </div>
         """, unsafe_allow_html=True)
     
     with col2:
         st.markdown(f"""
-        <div style='background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%); padding: 1.5rem; border-radius: 1rem; color: white; text-align: center; border: 3px solid #1E40AF;'>
-            <div style='font-size: 0.9rem; margin-bottom: 0.5rem;'>⭐ Approche RECOMMANDÉE</div>
+        <div style='background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%); padding: 1.5rem; border-radius: 1rem; color: white; text-align: center; border: 3px solid #1E40AF; box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);'>
+            <div style='font-size: 0.9rem; margin-bottom: 0.5rem; font-weight: 600;'>⭐ Approche RECOMMANDÉE</div>
             <div style='font-size: 2.5rem; font-weight: bold; margin: 0.5rem 0;'>{formater_cout(totaux['standard'])}</div>
-            <div style='background: rgba(255,255,255,0.2); padding: 0.5rem; border-radius: 0.3rem; margin-top: 0.5rem;'>
+            <div style='background: rgba(0,0,0,0.2); padding: 0.5rem; border-radius: 0.3rem; margin-top: 0.5rem; font-size: 0.9rem;'>
                 {'✓ RESTE: ' + formater_cout(budget_info['standard']['reste']) if not budget_info['standard']['depasse'] 
                  else '⚠️ Dépasse: ' + formater_cout(budget_info['standard']['montant_depassement'])}
             </div>
-            <div style='font-size: 0.85rem; margin-top: 0.5rem; opacity: 0.9;'>Mix interne/externe, meilleur ROI</div>
+            <div style='font-size: 0.85rem; margin-top: 0.5rem; opacity: 0.95;'>Mix interne/externe, meilleur ROI</div>
         </div>
         """, unsafe_allow_html=True)
     
     with col3:
         st.markdown(f"""
-        <div style='background: linear-gradient(135deg, #A855F7 0%, #9333EA 100%); padding: 1.5rem; border-radius: 1rem; color: white; text-align: center;'>
-            <div style='font-size: 0.9rem; margin-bottom: 0.5rem;'>🏆 Approche PREMIUM</div>
+        <div style='background: linear-gradient(135deg, #A855F7 0%, #9333EA 100%); padding: 1.5rem; border-radius: 1rem; color: white; text-align: center; box-shadow: 0 8px 20px rgba(168, 85, 247, 0.3);'>
+            <div style='font-size: 0.9rem; margin-bottom: 0.5rem; font-weight: 600;'>🏆 Approche PREMIUM</div>
             <div style='font-size: 2.5rem; font-weight: bold; margin: 0.5rem 0;'>{formater_cout(totaux['maximal'])}</div>
-            <div style='background: rgba(255,255,255,0.2); padding: 0.5rem; border-radius: 0.3rem; margin-top: 0.5rem;'>
+            <div style='background: rgba(0,0,0,0.2); padding: 0.5rem; border-radius: 0.3rem; margin-top: 0.5rem; font-size: 0.9rem;'>
                 {'✓ RESTE: ' + formater_cout(budget_info['maximal']['reste']) if not budget_info['maximal']['depasse'] 
                  else '⚠️ Dépasse: ' + formater_cout(budget_info['maximal']['montant_depassement'])}
             </div>
-            <div style='font-size: 0.85rem; margin-top: 0.5rem; opacity: 0.9;'>Consultants seniors, outils premium</div>
+            <div style='font-size: 0.85rem; margin-top: 0.5rem; opacity: 0.95;'>Consultants seniors, outils premium</div>
         </div>
         """, unsafe_allow_html=True)
     
@@ -631,7 +719,7 @@ elif st.session_state.etape == 3:
     # Budget total
     st.markdown("<br>", unsafe_allow_html=True)
     st.markdown(f"""
-    <div style='background: linear-gradient(135deg, #FCD34D 0%, #F59E0B 100%); padding: 1.5rem; border-radius: 1rem; color: #78350F;'>
+    <div style='background: linear-gradient(135deg, #FCD34D 0%, #F59E0B 100%); padding: 1.5rem; border-radius: 1rem; color: #78350F; box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);'>
         <div style='display: flex; justify-content: space-between; align-items: center;'>
             <div>
                 <div style='font-size: 0.9rem; font-weight: bold;'>💰 VOTRE BUDGET TOTAL DISPONIBLE</div>
