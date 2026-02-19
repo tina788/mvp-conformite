@@ -7,9 +7,9 @@
       "mandatory": true,
       "sectors": ["all"],
       "baseCost": 60000,
-      "description": "Loi québécoise sur la protection des renseignements personnels - OBLIGATOIRE pour toutes les organisations",
+      "description": "Loi québécoise - OBLIGATOIRE",
       "cloud": false,
-      "source": "CAI Québec, consultants locaux"
+      "source": "CAI Québec"
     },
     "nist_csf": {
       "id": "nist_csf",
@@ -18,113 +18,113 @@
       "mandatory": false,
       "sectors": ["all"],
       "baseCost": 50000,
-      "description": "Framework reconnu mondialement pour la gestion des risques cybersécurité",
+      "description": "Framework reconnu mondialement",
       "cloud": false,
-      "source": "NIST, Secureframe, consultants"
+      "source": "NIST"
     },
     "iso27001": {
       "id": "iso27001",
       "name": "ISO 27001",
-      "fullName": "ISO/IEC 27001:2022 - Système de management de la sécurité de l'information",
+      "fullName": "ISO/IEC 27001:2022",
       "mandatory": false,
       "sectors": ["all"],
       "baseCost": 75000,
-      "description": "Norme internationale pour la certification SMSI - Très valorisée par les clients",
+      "description": "Norme internationale SMSI",
       "cloud": false,
-      "source": "Organismes de certification, consultants ISO"
+      "source": "ISO"
     },
     "lprpsp": {
       "id": "lprpsp",
       "name": "LPRPSP",
-      "fullName": "Loi sur la protection des renseignements personnels dans le secteur privé (Santé)",
+      "fullName": "Loi protection RP secteur santé",
       "mandatory": true,
       "sectors": ["health"],
       "baseCost": 75000,
-      "description": "OBLIGATOIRE pour le secteur de la santé au Québec - Exigences renforcées",
+      "description": "OBLIGATOIRE secteur santé",
       "cloud": false,
-      "source": "CAI Québec, consultants santé"
+      "source": "CAI Québec"
     },
     "csa_ccm": {
       "id": "csa_ccm",
       "name": "CSA CCM",
-      "fullName": "Cloud Security Alliance - Cloud Controls Matrix",
+      "fullName": "Cloud Security Alliance",
       "mandatory": false,
       "sectors": ["all"],
       "baseCost": 90000,
-      "description": "Framework spécialisé pour la sécurité cloud - Recommandé si vous utilisez AWS/Azure/GCP",
+      "description": "Framework cloud",
       "cloud": true,
-      "source": "Cloud Security Alliance, consultants cloud"
+      "source": "CSA"
     },
     "iso27018": {
       "id": "iso27018",
       "name": "ISO 27018",
-      "fullName": "ISO/IEC 27018:2019 - Protection des données personnelles dans le cloud",
+      "fullName": "ISO/IEC 27018:2019",
       "mandatory": false,
       "sectors": ["all"],
       "baseCost": 120000,
-      "description": "Norme spécifique pour la protection des données personnelles dans les services cloud publics",
+      "description": "Protection données cloud",
       "cloud": true,
-      "source": "Organismes de certification, consultants cloud"
+      "source": "ISO"
     }
   },
   "economies": {
     "responsable_donnees": {
       "label": "Responsable de la protection des données désigné",
-      "description": "Une personne formellement responsable de la conformité et de la protection des données personnelles",
+      "description": "Une personne formellement responsable",
       "economie": 20000,
       "categorie": "gouvernance"
     },
     "politiques_documentees": {
-      "label": "Politiques de sécurité et confidentialité documentées",
-      "description": "Documents écrits décrivant vos pratiques de sécurité et de protection des données",
+      "label": "Politiques de sécurité documentées",
+      "description": "Documents écrits",
       "economie": 15000,
       "categorie": "gouvernance"
     },
     "formation_programme": {
-      "label": "Programme de formation et sensibilisation existant",
-      "description": "Formation régulière des employés sur la sécurité et la protection des données",
+      "label": "Programme de formation existant",
+      "description": "Formation régulière",
       "economie": 10000,
       "categorie": "gouvernance"
     },
     "chiffrement": {
-      "label": "Chiffrement des données (au repos et en transit)",
-      "description": "SSL/TLS pour les communications, encryption des bases de données et stockage",
+      "label": "Chiffrement des données",
+      "description": "SSL/TLS, encryption",
       "economie": 25000,
       "categorie": "securite"
     },
     "controles_acces": {
-      "label": "Contrôles d'accès et authentification robustes",
-      "description": "MFA, gestion des identités, principe du moindre privilège, revues d'accès",
+      "label": "Contrôles d'accès robustes",
+      "description": "MFA, gestion identités",
       "economie": 20000,
       "categorie": "securite"
     },
     "surveillance": {
-      "label": "Surveillance et journalisation des accès",
-      "description": "Logs centralisés, monitoring en temps réel, alertes automatiques",
+      "label": "Surveillance et logs",
+      "description": "Monitoring, journalisation",
       "economie": 15000,
       "categorie": "securite"
     },
     "sauvegardes": {
-      "label": "Sauvegardes régulières et plan de reprise",
-      "description": "Backups automatisés, tests de restauration, disaster recovery plan",
+      "label": "Sauvegardes régulières",
+      "description": "Backups automatisés",
       "economie": 12000,
       "categorie": "securite"
     },
     "gestion_incidents": {
-      "label": "Processus de gestion des incidents documenté",
-      "description": "Plan de réponse aux incidents, équipe dédiée, procédures testées",
+      "label": "Processus gestion incidents",
+      "description": "Plan réponse incidents",
       "economie": 18000,
       "categorie": "processus"
     },
     "registre_traitements": {
-      "label": "Registre des activités de traitement maintenu",
-      "description": "Documentation à jour de tous vos traitements de données personnelles",
+      "label": "Registre des traitements",
+      "description": "Documentation traitements",
       "economie": 15000,
       "categorie": "processus"
     },
     "evaluations_risques": {
-      "label": "Évaluations de risques régulières (ÉFVP)",
-      "description": "Analyse des risques cyber et vie privée, ÉFVP pour les projets à risque",
+      "label": "Évaluations risques (ÉFVP)",
+      "description": "Analyse risques",
       "economie": 20000,
       "categorie": "processus"
     }
