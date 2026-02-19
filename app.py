@@ -1,13 +1,12 @@
 """
 Application Streamlit - Assistant de Conformité Cybersécurité
-Version Ultra Visuelle
+Version Complète et Professionnelle
 """
 
 import streamlit as st
 import json
 import pandas as pd
 import plotly.graph_objects as go
-import plotly.express as px
 from pathlib import Path
 from datetime import datetime
 from utils.calculations import (
@@ -25,18 +24,13 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# ==================== STYLES CSS AVANCÉS ====================
+# ==================== STYLES CSS ====================
 st.markdown("""
 <style>
-/* Import Google Fonts */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
-/* Global */
-* {
-    font-family: 'Inter', sans-serif;
-}
+* { font-family: 'Inter', sans-serif; }
 
-/* Header avec effet glassmorphism */
 .main-header {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     padding: 2rem;
@@ -48,42 +42,24 @@ st.markdown("""
 }
 
 .main-title {
-    font-size: 3rem;
+    font-size: 2.5rem;
     font-weight: 800;
     margin-bottom: 0.5rem;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
 }
 
 .main-subtitle {
-    font-size: 1.2rem;
-    font-weight: 400;
+    font-size: 1.1rem;
     opacity: 0.95;
 }
 
-/* Cartes avec effet hover */
-.metric-card {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    padding: 1.5rem;
-    border-radius: 1rem;
-    color: white;
-    text-align: center;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-}
-
-.metric-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
-}
-
-/* Info boxes avec icônes */
 .info-box {
     background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%);
     border-left: 4px solid #3B82F6;
-    padding: 1.5rem;
+    padding: 1rem;
     border-radius: 0.75rem;
-    margin: 1.5rem 0;
-    box-shadow: 0 2px 10px rgba(59, 130, 246, 0.1);
+    margin: 1rem 0;
+    font-size: 0.95rem;
+    line-height: 1.6;
 }
 
 .warning-box {
@@ -92,7 +68,6 @@ st.markdown("""
     padding: 1.5rem;
     border-radius: 0.75rem;
     margin: 1.5rem 0;
-    box-shadow: 0 2px 10px rgba(245, 158, 11, 0.1);
 }
 
 .success-box {
@@ -101,57 +76,17 @@ st.markdown("""
     padding: 1.5rem;
     border-radius: 0.75rem;
     margin: 1.5rem 0;
-    box-shadow: 0 2px 10px rgba(16, 185, 129, 0.1);
 }
 
-/* Boutons améliorés */
-.stButton>button {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    font-weight: 600;
-    border-radius: 0.5rem;
-    border: none;
-    padding: 0.75rem 2rem;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
-}
-
-.stButton>button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
-}
-
-/* Progress bar personnalisée */
-.stProgress > div > div > div {
-    background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
-}
-
-/* Expander styling */
-.streamlit-expanderHeader {
-    background: linear-gradient(135deg, #F3F4F6 0%, #E5E7EB 100%);
-    border-radius: 0.5rem;
-    font-weight: 600;
-    padding: 1rem !important;
-}
-
-/* Référentiel card */
 .ref-card {
     background: white;
     border-radius: 1rem;
     padding: 1.5rem;
     margin: 1rem 0;
     box-shadow: 0 4px 6px rgba(0,0,0,0.07);
-    border: 2px solid transparent;
-    transition: all 0.3s ease;
+    border: 2px solid #E5E7EB;
 }
 
-.ref-card:hover {
-    border-color: #667eea;
-    box-shadow: 0 8px 15px rgba(102, 126, 234, 0.2);
-    transform: translateY(-3px);
-}
-
-/* Badges */
 .badge {
     display: inline-block;
     padding: 0.4rem 1rem;
@@ -171,20 +106,13 @@ st.markdown("""
     color: white;
 }
 
-/* Animations */
-@keyframes slideIn {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.animated {
-    animation: slideIn 0.5s ease-out;
+.stButton>button {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    font-weight: 600;
+    border-radius: 0.5rem;
+    border: none;
+    padding: 0.75rem 2rem;
 }
 </style>
 """, unsafe_allow_html=True)
@@ -198,7 +126,7 @@ def charger_donnees():
 
 data = charger_donnees()
 
-# ==================== INITIALISATION SESSION ====================
+# ==================== SESSION STATE ====================
 if 'etape' not in st.session_state:
     st.session_state.etape = 1
 if 'profil' not in st.session_state:
@@ -206,23 +134,21 @@ if 'profil' not in st.session_state:
 if 'economies_selectionnees' not in st.session_state:
     st.session_state.economies_selectionnees = []
 
-# ==================== HEADER MAGNIFIQUE ====================
+# ==================== HEADER ====================
 st.markdown("""
-<div class="main-header animated">
+<div class="main-header">
     <div class="main-title">🔒 Assistant de Conformité Cybersécurité</div>
     <div class="main-subtitle">Outil intelligent adapté à votre profil et budget</div>
 </div>
 """, unsafe_allow_html=True)
 
 st.markdown("""
-<div class="info-box animated">
+<div class="info-box">
     <strong>📊 Sources des coûts:</strong> Estimations basées sur des consultants canadiens/québécois (2024-2026), 
-    études de marché (Matayo AI, IAS Canada, Secureframe) et documents officiels (NIST, CAI Québec). 
-    Les coûts réels peuvent varier de ±30% selon votre contexte spécifique.
+    études de marché (Matayo AI, IAS Canada, Secureframe) et documents officiels (NIST, CAI Québec).
 </div>
 """, unsafe_allow_html=True)
 
-# Barre de progression stylée
 progress = (st.session_state.etape - 1) / 2
 col1, col2, col3 = st.columns([1, 3, 1])
 with col2:
@@ -233,7 +159,6 @@ st.markdown("<br>", unsafe_allow_html=True)
 # ==================== ÉTAPE 1: PROFIL ====================
 if st.session_state.etape == 1:
     st.markdown("## 📋 Profil de l'organisation")
-    st.markdown("<div class='animated'>", unsafe_allow_html=True)
     
     col1, col2 = st.columns(2)
     
@@ -245,23 +170,23 @@ if st.session_state.etape == 1:
             format_func=lambda x: {
                 "": "-- Sélectionnez --",
                 "health": "🏥 Santé",
-                "finance": "💰 Finance / Assurance",
-                "public": "🏛️ Secteur public",
-                "tech": "💻 Technologies / SaaS",
-                "retail": "🛍️ Commerce / Retail",
+                "finance": "💰 Finance",
+                "public": "🏛️ Public",
+                "tech": "💻 Tech",
+                "retail": "🛍️ Retail",
                 "other": "📊 Autre"
             }[x]
         )
         
         taille = st.selectbox(
-            "Taille de l'organisation",
+            "Taille",
             options=["", "micro", "small", "medium", "large"],
             format_func=lambda x: {
                 "": "-- Sélectionnez --",
-                "micro": "👤 Micro (1-10 employés)",
-                "small": "👥 Petite (11-49 employés)",
-                "medium": "👨‍👩‍👧‍👦 Moyenne (50-199 employés)",
-                "large": "🏢 Grande (200+ employés)"
+                "micro": "Micro (1-10)",
+                "small": "Petite (11-49)",
+                "medium": "Moyenne (50-199)",
+                "large": "Grande (200+)"
             }[x]
         )
     
@@ -272,21 +197,21 @@ if st.session_state.etape == 1:
             options=["", "low", "medium", "high"],
             format_func=lambda x: {
                 "": "-- Sélectionnez --",
-                "low": "💰 Limité (< 50K$)",
-                "medium": "💰💰 Moyen (50-200K$)",
-                "high": "💰💰💰 Élevé (> 200K$)"
+                "low": "Limité (< 50K$)",
+                "medium": "Moyen (50-200K$)",
+                "high": "Élevé (> 200K$)"
             }[x]
         )
         
         maturite = st.selectbox(
-            "Niveau de maturité cybersécurité",
+            "Maturité cybersécurité",
             options=["", "initial", "managed", "defined", "optimized"],
             format_func=lambda x: {
                 "": "-- Sélectionnez --",
-                "initial": "🌱 Initial",
-                "managed": "🌿 Géré",
-                "defined": "🌳 Défini",
-                "optimized": "🌲 Optimisé"
+                "initial": "Initial",
+                "managed": "Géré",
+                "defined": "Défini",
+                "optimized": "Optimisé"
             }[x]
         )
     
@@ -295,21 +220,20 @@ if st.session_state.etape == 1:
     infrastructure = []
     
     with cols[0]:
-        if st.checkbox("🖥️ Sur site (On-premise)", key="infra_onprem"):
+        if st.checkbox("Sur site", key="infra_onprem"):
             infrastructure.append("onprem")
     with cols[1]:
-        if st.checkbox("☁️ Cloud (AWS, Azure, GCP)", key="infra_cloud"):
+        if st.checkbox("Cloud", key="infra_cloud"):
             infrastructure.append("cloud")
     with cols[2]:
-        if st.checkbox("🔄 Hybride", key="infra_hybrid"):
+        if st.checkbox("Hybride", key="infra_hybrid"):
             infrastructure.append("hybrid")
     
-    st.markdown("</div>", unsafe_allow_html=True)
     st.markdown("<br>", unsafe_allow_html=True)
     
     if st.button("➡️ Suivant: Évaluation de l'existant", type="primary", use_container_width=True):
         if not secteur or not taille or not budget or not maturite or not infrastructure:
-            st.error("⚠️ Veuillez remplir tous les champs obligatoires")
+            st.error("⚠️ Veuillez remplir tous les champs")
         else:
             st.session_state.profil = {
                 'secteur': secteur,
@@ -326,9 +250,8 @@ elif st.session_state.etape == 2:
     st.markdown("## 💡 Évaluation de l'existant")
     
     st.markdown("""
-    <div class="success-box animated">
-        <strong>💡 Astuce:</strong> Cochez tout ce que vous avez DÉJÀ en place pour réduire considérablement 
-        les coûts d'implémentation! Chaque élément coché = économies substantielles.
+    <div class="success-box">
+        <strong>💡 Astuce:</strong> Cochez tout ce que vous avez DÉJÀ en place pour réduire les coûts!
     </div>
     """, unsafe_allow_html=True)
     
@@ -339,117 +262,51 @@ elif st.session_state.etape == 2:
     
     economies_selectionnees = []
     
-    # Gouvernance avec style
     with st.expander("📋 **Gouvernance et Politiques**", expanded=True):
         for key, item in gouvernance.items():
             col1, col2 = st.columns([3, 1])
             with col1:
-                checked = st.checkbox(
-                    f"**{item['label']}**",
-                    help=item['description'],
-                    key=f"eco_{key}"
-                )
+                checked = st.checkbox(f"**{item['label']}**", help=item['description'], key=f"eco_{key}")
             with col2:
                 if checked:
                     economies_selectionnees.append(key)
                     st.markdown(f"<span style='color: #10B981; font-weight: bold;'>+{formater_cout(item['economie'])}</span>", unsafe_allow_html=True)
     
-    # Sécurité avec style
     with st.expander("🔒 **Sécurité Technique**", expanded=True):
         for key, item in securite.items():
             col1, col2 = st.columns([3, 1])
             with col1:
-                checked = st.checkbox(
-                    f"**{item['label']}**",
-                    help=item['description'],
-                    key=f"eco_{key}"
-                )
+                checked = st.checkbox(f"**{item['label']}**", help=item['description'], key=f"eco_{key}")
             with col2:
                 if checked:
                     economies_selectionnees.append(key)
                     st.markdown(f"<span style='color: #10B981; font-weight: bold;'>+{formater_cout(item['economie'])}</span>", unsafe_allow_html=True)
     
-    # Processus avec style
     with st.expander("⚙️ **Processus et Procédures**", expanded=True):
         for key, item in processus.items():
             col1, col2 = st.columns([3, 1])
             with col1:
-                checked = st.checkbox(
-                    f"**{item['label']}**",
-                    help=item['description'],
-                    key=f"eco_{key}"
-                )
+                checked = st.checkbox(f"**{item['label']}**", help=item['description'], key=f"eco_{key}")
             with col2:
                 if checked:
                     economies_selectionnees.append(key)
                     st.markdown(f"<span style='color: #10B981; font-weight: bold;'>+{formater_cout(item['economie'])}</span>", unsafe_allow_html=True)
     
-    # Graphique économies
     total_economies = calculer_economies(economies_selectionnees, economies_data)
     
     st.markdown("<br>", unsafe_allow_html=True)
     
-    # Métriques visuelles
     col1, col2, col3, col4 = st.columns(4)
     
     with col1:
-        st.markdown(f"""
-        <div style='background: linear-gradient(135deg, #10B981 0%, #059669 100%); 
-                    padding: 1.5rem; border-radius: 1rem; text-align: center; color: white;
-                    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);'>
-            <div style='font-size: 0.9rem; opacity: 0.9;'>💰 Économies totales</div>
-            <div style='font-size: 2rem; font-weight: bold; margin-top: 0.5rem;'>{formater_cout(total_economies)}</div>
-        </div>
-        """, unsafe_allow_html=True)
-    
+        st.metric("💰 Économies totales", formater_cout(total_economies))
     with col2:
-        st.markdown(f"""
-        <div style='background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%); 
-                    padding: 1.5rem; border-radius: 1rem; text-align: center; color: white;
-                    box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);'>
-            <div style='font-size: 0.9rem; opacity: 0.9;'>✅ Éléments cochés</div>
-            <div style='font-size: 2rem; font-weight: bold; margin-top: 0.5rem;'>{len(economies_selectionnees)}/10</div>
-        </div>
-        """, unsafe_allow_html=True)
-    
-    pct = round((total_economies / 170000) * 100) if total_economies > 0 else 0
-    
+        st.metric("✅ Éléments", f"{len(economies_selectionnees)}/10")
     with col3:
-        st.markdown(f"""
-        <div style='background: linear-gradient(135deg, #8B5CF6 0%, #7C3AED 100%); 
-                    padding: 1.5rem; border-radius: 1rem; text-align: center; color: white;
-                    box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);'>
-            <div style='font-size: 0.9rem; opacity: 0.9;'>📊 Progression</div>
-            <div style='font-size: 2rem; font-weight: bold; margin-top: 0.5rem;'>{pct}%</div>
-        </div>
-        """, unsafe_allow_html=True)
-    
+        pct = round((total_economies / 170000) * 100) if total_economies > 0 else 0
+        st.metric("📊 Progression", f"{pct}%")
     with col4:
-        st.markdown(f"""
-        <div style='background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%); 
-                    padding: 1.5rem; border-radius: 1rem; text-align: center; color: white;
-                    box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);'>
-            <div style='font-size: 0.9rem; opacity: 0.9;'>🎯 Maximum</div>
-            <div style='font-size: 2rem; font-weight: bold; margin-top: 0.5rem;'>170K$</div>
-        </div>
-        """, unsafe_allow_html=True)
-    
-    # Graphique en donut
-    if total_economies > 0:
-        st.markdown("<br>", unsafe_allow_html=True)
-        fig = go.Figure(data=[go.Pie(
-            labels=['Économies réalisées', 'Potentiel restant'],
-            values=[total_economies, 170000 - total_economies],
-            hole=.6,
-            marker_colors=['#10B981', '#E5E7EB']
-        )])
-        fig.update_layout(
-            showlegend=True,
-            height=300,
-            margin=dict(t=0, b=0, l=0, r=0),
-            annotations=[dict(text=f'{pct}%', x=0.5, y=0.5, font_size=40, showarrow=False)]
-        )
-        st.plotly_chart(fig, use_container_width=True)
+        st.metric("🎯 Maximum", "170K$")
     
     st.markdown("<br>", unsafe_allow_html=True)
     
@@ -459,7 +316,7 @@ elif st.session_state.etape == 2:
             st.session_state.etape = 1
             st.rerun()
     with col_next:
-        if st.button("🎯 Voir mes recommandations", type="primary", use_container_width=True):
+        if st.button("🎯 Voir recommandations", type="primary", use_container_width=True):
             st.session_state.economies_selectionnees = economies_selectionnees
             st.session_state.etape = 3
             st.rerun()
@@ -474,100 +331,38 @@ elif st.session_state.etape == 3:
     obligatoires, optionnels = filtrer_referentiels_applicables(data['referentiels'], profil)
     recommandations = generer_recommandations(obligatoires, optionnels, total_economies, profil['budget'])
     
-    # Profil résumé visuel
+    # Profil
     st.markdown("### 👤 Votre profil")
     col1, col2, col3, col4 = st.columns(4)
     
-    secteur_labels = {"health": "🏥 Santé", "finance": "💰 Finance", "public": "🏛️ Public", "tech": "💻 Tech", "retail": "🛍️ Retail", "other": "📊 Autre"}
-    taille_labels = {"micro": "👤 Micro", "small": "👥 Petite", "medium": "👨‍👩‍👧‍👦 Moyenne", "large": "🏢 Grande"}
-    
     with col1:
-        st.markdown(f"""
-        <div style='background: white; padding: 1rem; border-radius: 0.5rem; border-left: 4px solid #667eea; box-shadow: 0 2px 8px rgba(0,0,0,0.1);'>
-            <div style='color: #6B7280; font-size: 0.85rem;'>Secteur</div>
-            <div style='color: #1F2937; font-size: 1.2rem; font-weight: bold; margin-top: 0.25rem;'>{secteur_labels.get(profil['secteur'], profil['secteur'])}</div>
-        </div>
-        """, unsafe_allow_html=True)
-    
+        st.metric("Secteur", profil['secteur'].title())
     with col2:
-        st.markdown(f"""
-        <div style='background: white; padding: 1rem; border-radius: 0.5rem; border-left: 4px solid #10B981; box-shadow: 0 2px 8px rgba(0,0,0,0.1);'>
-            <div style='color: #6B7280; font-size: 0.85rem;'>Taille</div>
-            <div style='color: #1F2937; font-size: 1.2rem; font-weight: bold; margin-top: 0.25rem;'>{taille_labels.get(profil['taille'], profil['taille'])}</div>
-        </div>
-        """, unsafe_allow_html=True)
-    
+        st.metric("Taille", profil['taille'].title())
     with col3:
-        st.markdown(f"""
-        <div style='background: white; padding: 1rem; border-radius: 0.5rem; border-left: 4px solid #F59E0B; box-shadow: 0 2px 8px rgba(0,0,0,0.1);'>
-            <div style='color: #6B7280; font-size: 0.85rem;'>Budget</div>
-            <div style='color: #1F2937; font-size: 1.2rem; font-weight: bold; margin-top: 0.25rem;'>{formater_cout(recommandations['budget']['montant'])}</div>
-        </div>
-        """, unsafe_allow_html=True)
-    
+        st.metric("Budget", formater_cout(recommandations['budget']['montant']))
     with col4:
-        st.markdown(f"""
-        <div style='background: white; padding: 1rem; border-radius: 0.5rem; border-left: 4px solid #8B5CF6; box-shadow: 0 2px 8px rgba(0,0,0,0.1);'>
-            <div style='color: #6B7280; font-size: 0.85rem;'>Économies</div>
-            <div style='color: #1F2937; font-size: 1.2rem; font-weight: bold; margin-top: 0.25rem;'>{formater_cout(total_economies)}</div>
-        </div>
-        """, unsafe_allow_html=True)
+        st.metric("Économies", formater_cout(total_economies))
     
-    st.markdown("<br><br>", unsafe_allow_html=True)
+    st.divider()
     
-    # Vue d'ensemble avec graphique
-    st.markdown("### 📊 Vue d'ensemble - 3 approches")
-    
+    # Vue d'ensemble
     totaux = recommandations['totaux']
     budget_info = recommandations['budget']
     
-    # Graphique comparatif
-    fig = go.Figure()
+    st.markdown("### 📊 Vue d'ensemble - 3 approches")
     
-    approaches = ['💰 Économique', '⭐ Recommandée', '🏆 Premium']
-    costs = [totaux['minimal'], totaux['standard'], totaux['maximal']]
-    colors = ['#10B981', '#3B82F6', '#8B5CF6']
-    
-    fig.add_trace(go.Bar(
-        x=approaches,
-        y=costs,
-        marker_color=colors,
-        text=[formater_cout(c) for c in costs],
-        textposition='auto',
-    ))
-    
-    fig.add_hline(y=budget_info['montant'], line_dash="dash", line_color="red", 
-                  annotation_text=f"Budget: {formater_cout(budget_info['montant'])}")
-    
-    fig.update_layout(
-        title="Comparaison des 3 approches",
-        yaxis_title="Coût ($)",
-        height=400,
-        showlegend=False
-    )
-    
-    st.plotly_chart(fig, use_container_width=True)
-    
-    # Cartes des 3 approches
     col1, col2, col3 = st.columns(3)
     
     with col1:
         st.markdown(f"""
         <div style='background: linear-gradient(135deg, #10b981 0%, #059669 100%); 
-                    padding: 2rem; border-radius: 1rem; color: white; text-align: center;
-                    box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);'>
-            <div style='font-size: 1rem; margin-bottom: 0.5rem;'>💰 ÉCONOMIQUE</div>
-            <div style='font-size: 2.5rem; font-weight: bold;'>{formater_cout(totaux['minimal'])}</div>
-            <div style='font-size: 0.9rem; margin-top: 0.5rem; opacity: 0.9;'>
+                    padding: 2rem; border-radius: 1rem; color: white; text-align: center;'>
+            <div style='font-size: 1rem;'>💰 ÉCONOMIQUE</div>
+            <div style='font-size: 2.5rem; font-weight: bold; margin: 0.5rem 0;'>{formater_cout(totaux['minimal'])}</div>
+            <div style='font-size: 0.9rem;'>
                 {'✓ Reste: ' + formater_cout(budget_info['minimal']['reste']) if not budget_info['minimal']['depasse'] 
                  else '⚠️ Dépasse: ' + formater_cout(budget_info['minimal']['montant_depassement'])}
-            </div>
-            <hr style='border: none; border-top: 1px solid rgba(255,255,255,0.3); margin: 1rem 0;'>
-            <div style='font-size: 0.8rem; text-align: left;'>
-                ✓ 100% interne<br>
-                ✓ Templates gratuits<br>
-                ✓ Formation en ligne<br>
-                ⚠️ + de temps requis
             </div>
         </div>
         """, unsafe_allow_html=True)
@@ -575,21 +370,12 @@ elif st.session_state.etape == 3:
     with col2:
         st.markdown(f"""
         <div style='background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); 
-                    padding: 2rem; border-radius: 1rem; color: white; text-align: center;
-                    box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);
-                    border: 3px solid #1e40af;'>
-            <div style='font-size: 1rem; margin-bottom: 0.5rem;'>⭐ RECOMMANDÉE</div>
-            <div style='font-size: 2.5rem; font-weight: bold;'>{formater_cout(totaux['standard'])}</div>
-            <div style='font-size: 0.9rem; margin-top: 0.5rem; opacity: 0.9;'>
+                    padding: 2rem; border-radius: 1rem; color: white; text-align: center; border: 3px solid #1e40af;'>
+            <div style='font-size: 1rem;'>⭐ RECOMMANDÉE</div>
+            <div style='font-size: 2.5rem; font-weight: bold; margin: 0.5rem 0;'>{formater_cout(totaux['standard'])}</div>
+            <div style='font-size: 0.9rem;'>
                 {'✓ Reste: ' + formater_cout(budget_info['standard']['reste']) if not budget_info['standard']['depasse'] 
                  else '⚠️ Dépasse: ' + formater_cout(budget_info['standard']['montant_depassement'])}
-            </div>
-            <hr style='border: none; border-top: 1px solid rgba(255,255,255,0.3); margin: 1rem 0;'>
-            <div style='font-size: 0.8rem; text-align: left;'>
-                ✓ Mix interne/externe<br>
-                ✓ Consultant GAP<br>
-                ✓ Outils standards<br>
-                ⭐ MEILLEUR ROI
             </div>
         </div>
         """, unsafe_allow_html=True)
@@ -597,76 +383,267 @@ elif st.session_state.etape == 3:
     with col3:
         st.markdown(f"""
         <div style='background: linear-gradient(135deg, #a855f7 0%, #9333ea 100%); 
-                    padding: 2rem; border-radius: 1rem; color: white; text-align: center;
-                    box-shadow: 0 8px 20px rgba(168, 85, 247, 0.3);'>
-            <div style='font-size: 1rem; margin-bottom: 0.5rem;'>🏆 PREMIUM</div>
-            <div style='font-size: 2.5rem; font-weight: bold;'>{formater_cout(totaux['maximal'])}</div>
-            <div style='font-size: 0.9rem; margin-top: 0.5rem; opacity: 0.9;'>
+                    padding: 2rem; border-radius: 1rem; color: white; text-align: center;'>
+            <div style='font-size: 1rem;'>🏆 PREMIUM</div>
+            <div style='font-size: 2.5rem; font-weight: bold; margin: 0.5rem 0;'>{formater_cout(totaux['maximal'])}</div>
+            <div style='font-size: 0.9rem;'>
                 {'✓ Reste: ' + formater_cout(budget_info['maximal']['reste']) if not budget_info['maximal']['depasse'] 
                  else '⚠️ Dépasse: ' + formater_cout(budget_info['maximal']['montant_depassement'])}
-            </div>
-            <hr style='border: none; border-top: 1px solid rgba(255,255,255,0.3); margin: 1rem 0;'>
-            <div style='font-size: 0.8rem; text-align: left;'>
-                ✓ Consultants seniors<br>
-                ✓ Outils premium<br>
-                ✓ Support 12 mois<br>
-                🏆 Excellence garantie
             </div>
         </div>
         """, unsafe_allow_html=True)
     
     st.markdown("<br><br>", unsafe_allow_html=True)
     
-    # Obligations
+    # Obligations DÉTAILLÉES
     if recommandations['obligatoires']:
-        st.markdown("### ⚠️ À implémenter MAINTENANT")
+        st.markdown("### ⚠️ À IMPLÉMENTER MAINTENANT")
         
         st.markdown("""
         <div class="warning-box">
-            <strong>⚠️ Attention:</strong> Ces référentiels sont OBLIGATOIRES selon votre profil.
+            <strong>⚠️ Attention:</strong> Ces référentiels sont OBLIGATOIRES.
         </div>
         """, unsafe_allow_html=True)
         
         for idx, ref in enumerate(recommandations['obligatoires'], 1):
             st.markdown(f"""
             <div class="ref-card">
-                <h3 style='color: #1F2937; margin: 0 0 0.5rem 0;'>
-                    {idx}. {ref['name']}
-                    <span class='badge badge-mandatory'>⚠️ OBLIGATOIRE</span>
-                </h3>
-                <p style='color: #6B7280; margin: 0 0 1rem 0;'>{ref['description']}</p>
+                <h3 style='margin: 0 0 0.5rem 0;'>{idx}. {ref['name']} 
+                <span class='badge badge-mandatory'>⚠️ OBLIGATOIRE</span></h3>
+                <p style='color: #6B7280;'>{ref['description']}</p>
             </div>
             """, unsafe_allow_html=True)
+            
+            st.markdown("#### 💵 CHOIX D'APPROCHES - Quel investissement?")
             
             col1, col2, col3 = st.columns(3)
             
             with col1:
-                st.markdown(f"**💰 Économique:** {formater_cout(ref['cout_minimal'])}")
-            with col2:
-                st.markdown(f"**⭐ Recommandé:** {formater_cout(ref['cout_standard'])}")
-            with col3:
-                st.markdown(f"**🏆 Premium:** {formater_cout(ref['cout_maximal'])}")
-    
-    # Optionnels
-    if recommandations['optionnels']:
-        st.markdown("<br>", unsafe_allow_html=True)
-        st.markdown("### 💡 Recommandations pour plus tard")
-        
-        cols = st.columns(2)
-        for idx, ref in enumerate(recommandations['optionnels']):
-            with cols[idx % 2]:
                 st.markdown(f"""
-                <div class="ref-card">
-                    <h4 style='color: #3B82F6; margin: 0 0 0.5rem 0;'>
-                        {ref['name']}
-                        <span class='badge badge-optional'>💡 OPTIONNEL</span>
-                    </h4>
-                    <p style='color: #6B7280; font-size: 0.9rem; margin: 0 0 0.5rem 0;'>{ref['description']}</p>
-                    <p style='font-size: 1.3rem; font-weight: bold; color: #3B82F6; margin: 0;'>
-                        {formater_cout(ref['cout_standard'])}
-                    </p>
+                <div style='background: #DEF7EC; padding: 1rem; border-radius: 0.5rem; border: 2px solid #10B981;'>
+                    <div style='text-align: center; background: #10B981; color: white; padding: 0.5rem; border-radius: 0.3rem; margin-bottom: 0.5rem;'>
+                        <div style='font-size: 0.8rem;'>💰 APPROCHE ÉCONOMIQUE</div>
+                        <div style='font-size: 1.8rem; font-weight: bold;'>{formater_cout(ref['cout_minimal'])}</div>
+                    </div>
+                    <div style='font-size: 0.85rem;'>
+                        <strong>✓ Ce qui EST inclus:</strong><br>
+                        • Travail 100% interne<br>
+                        • Templates gratuits<br>
+                        • Outils Excel/Google<br>
+                        • Formation en ligne<br>
+                        • ÉFVP simplifiées<br><br>
+                        <strong style='color: #F59E0B;'>✗ Ce qui MANQUE:</strong><br>
+                        • Consultants externes<br>
+                        • Outils automatisés<br>
+                        • Formation présentielle<br>
+                        • Audits externes<br><br>
+                        <strong style='color: #EF4444;'>⚠️ Risque:</strong> Plus de temps requis
+                    </div>
                 </div>
                 """, unsafe_allow_html=True)
+            
+            with col2:
+                st.markdown(f"""
+                <div style='background: #DBEAFE; padding: 1rem; border-radius: 0.5rem; border: 2px solid #3B82F6;'>
+                    <div style='text-align: center; background: #3B82F6; color: white; padding: 0.5rem; border-radius: 0.3rem; margin-bottom: 0.5rem;'>
+                        <div style='font-size: 0.8rem;'>⭐ APPROCHE RECOMMANDÉE</div>
+                        <div style='font-size: 1.8rem; font-weight: bold;'>{formater_cout(ref['cout_standard'])}</div>
+                    </div>
+                    <div style='font-size: 0.85rem;'>
+                        <strong>✓ Ce qui EST inclus:</strong><br>
+                        • Consultant GAP analysis<br>
+                        • Mix interne/externe<br>
+                        • Outils standards<br>
+                        • Formation mixte<br>
+                        • ÉFVP 2-3 processus<br>
+                        • Documentation complète<br><br>
+                        <strong style='color: #10B981;'>💡 Pourquoi:</strong><br>
+                        • Équilibre optimal<br>
+                        • Expertise ciblée<br>
+                        • Conformité solide<br><br>
+                        <strong style='color: #10B981;'>✓ MEILLEUR ROI</strong>
+                    </div>
+                </div>
+                """, unsafe_allow_html=True)
+            
+            with col3:
+                st.markdown(f"""
+                <div style='background: #F3E8FF; padding: 1rem; border-radius: 0.5rem; border: 2px solid #A855F7;'>
+                    <div style='text-align: center; background: #A855F7; color: white; padding: 0.5rem; border-radius: 0.3rem; margin-bottom: 0.5rem;'>
+                        <div style='font-size: 0.8rem;'>🏆 APPROCHE PREMIUM</div>
+                        <div style='font-size: 1.8rem; font-weight: bold;'>{formater_cout(ref['cout_maximal'])}</div>
+                    </div>
+                    <div style='font-size: 0.85rem;'>
+                        <strong>✓ Ce qui EST inclus:</strong><br>
+                        • Consultants seniors<br>
+                        • Outils premium<br>
+                        • Formation sur mesure<br>
+                        • ÉFVP tous processus<br>
+                        • Audits complets<br>
+                        • Support 12 mois<br>
+                        • Certification<br><br>
+                        <strong style='color: #A855F7;'>💎 Avantages:</strong><br>
+                        • Plus rapide<br>
+                        • Risque minimal<br>
+                        • Excellence garantie
+                    </div>
+                </div>
+                """, unsafe_allow_html=True)
+            
+            # Tableau comparatif
+            st.markdown("##### 📊 Comparaison détaillée:")
+            df = pd.DataFrame({
+                'Poste': ['Coût initial', 'Économies existant', 'Optimisations', 'Premium +', 'TOTAL'],
+                'Économique': [
+                    formater_cout(ref['baseCost']),
+                    f"-{formater_cout(ref['economies'])}",
+                    f"-{formater_cout(ref['cout_standard'] - ref['cout_minimal'])}",
+                    "-",
+                    formater_cout(ref['cout_minimal'])
+                ],
+                'Recommandé': [
+                    formater_cout(ref['baseCost']),
+                    f"-{formater_cout(ref['economies'])}",
+                    "-",
+                    "-",
+                    formater_cout(ref['cout_standard'])
+                ],
+                'Premium': [
+                    formater_cout(ref['baseCost']),
+                    "-",
+                    "-",
+                    f"+{formater_cout(ref['cout_maximal'] - ref['baseCost'])}",
+                    formater_cout(ref['cout_maximal'])
+                ]
+            })
+            st.dataframe(df, use_container_width=True, hide_index=True)
+            
+            # DÉTAILS: Ce qui doit être mis en place
+            with st.expander("📋 **DÉTAILS: Ce qui doit être mis en place** (cliquez pour voir)", expanded=False):
+                st.markdown("""
+                **⚠️ Version minimale:**
+                • Consultants externes → Travail interne
+                • Formation complète → Formation de base
+                • Outils automatisés → Excel et documents
+                • À compléter dans 6-12 mois
+                
+                **⭐ Version recommandée:**
+                • Mix 60% interne / 40% externe
+                • Consultant pour GAP analysis initiale
+                • Outils standards de conformité
+                • Formation mixte (en ligne + présentiel)
+                • ÉFVP sur 2-3 processus critiques
+                • À compléter dans 4-6 mois
+                
+                **🏆 Version premium:**
+                • Consultants seniors dédiés
+                • Outils automatisés premium
+                • Formation sur mesure présentielle
+                • ÉFVP approfondies tous processus
+                • Audits externes complets
+                • Support continu 12 mois
+                • À compléter dans 3-4 mois
+                """)
+            
+            st.markdown("<br>", unsafe_allow_html=True)
+    
+    # RÉSUMÉ TOTAL
+    st.markdown("---")
+    st.markdown("## 💰 RÉSUMÉ: TOTAL À INVESTIR MAINTENANT")
+    
+    nb_obligatoires = len(recommandations['obligatoires'])
+    
+    st.markdown(f"**{nb_obligatoires} référentiel(s) obligatoire(s) - Choisissez votre approche**")
+    
+    col1, col2, col3 = st.columns(3)
+    
+    with col1:
+        st.markdown(f"""
+        <div style='background: linear-gradient(135deg, #8B5CF6 0%, #7C3AED 100%); padding: 1.5rem; border-radius: 1rem; color: white; text-align: center;'>
+            <div style='font-size: 0.9rem; margin-bottom: 0.5rem;'>💰 Approche ÉCONOMIQUE</div>
+            <div style='font-size: 2.5rem; font-weight: bold; margin: 0.5rem 0;'>{formater_cout(totaux['minimal'])}</div>
+            <div style='background: rgba(255,255,255,0.2); padding: 0.5rem; border-radius: 0.3rem; margin-top: 0.5rem;'>
+                {'✓ RESTE: ' + formater_cout(budget_info['minimal']['reste']) if not budget_info['minimal']['depasse'] 
+                 else '⚠️ Dépasse: ' + formater_cout(budget_info['minimal']['montant_depassement'])}
+            </div>
+            <div style='font-size: 0.85rem; margin-top: 0.5rem; opacity: 0.9;'>Travail interne, templates gratuits</div>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    with col2:
+        st.markdown(f"""
+        <div style='background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%); padding: 1.5rem; border-radius: 1rem; color: white; text-align: center; border: 3px solid #1E40AF;'>
+            <div style='font-size: 0.9rem; margin-bottom: 0.5rem;'>⭐ Approche RECOMMANDÉE</div>
+            <div style='font-size: 2.5rem; font-weight: bold; margin: 0.5rem 0;'>{formater_cout(totaux['standard'])}</div>
+            <div style='background: rgba(255,255,255,0.2); padding: 0.5rem; border-radius: 0.3rem; margin-top: 0.5rem;'>
+                {'✓ RESTE: ' + formater_cout(budget_info['standard']['reste']) if not budget_info['standard']['depasse'] 
+                 else '⚠️ Dépasse: ' + formater_cout(budget_info['standard']['montant_depassement'])}
+            </div>
+            <div style='font-size: 0.85rem; margin-top: 0.5rem; opacity: 0.9;'>Mix interne/externe, meilleur ROI</div>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    with col3:
+        st.markdown(f"""
+        <div style='background: linear-gradient(135deg, #A855F7 0%, #9333EA 100%); padding: 1.5rem; border-radius: 1rem; color: white; text-align: center;'>
+            <div style='font-size: 0.9rem; margin-bottom: 0.5rem;'>🏆 Approche PREMIUM</div>
+            <div style='font-size: 2.5rem; font-weight: bold; margin: 0.5rem 0;'>{formater_cout(totaux['maximal'])}</div>
+            <div style='background: rgba(255,255,255,0.2); padding: 0.5rem; border-radius: 0.3rem; margin-top: 0.5rem;'>
+                {'✓ RESTE: ' + formater_cout(budget_info['maximal']['reste']) if not budget_info['maximal']['depasse'] 
+                 else '⚠️ Dépasse: ' + formater_cout(budget_info['maximal']['montant_depassement'])}
+            </div>
+            <div style='font-size: 0.85rem; margin-top: 0.5rem; opacity: 0.9;'>Consultants seniors, outils premium</div>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    # Quelle approche choisir
+    st.markdown("<br>", unsafe_allow_html=True)
+    st.markdown("### 💡 Quelle approche choisir?")
+    
+    col1, col2, col3 = st.columns(3)
+    
+    with col1:
+        st.markdown("""
+        **Économique si:**
+        • Budget très limité
+        • Expertise interne solide
+        • Temps disponible (9-12 mois)
+        """)
+    
+    with col2:
+        st.markdown("""
+        **Recommandée si:**
+        • Budget moyen
+        • Mix expertise interne/externe
+        • Délai standard (6-9 mois)
+        • **MEILLEUR RAPPORT QUALITÉ/PRIX**
+        """)
+    
+    with col3:
+        st.markdown("""
+        **Premium si:**
+        • Budget élevé disponible
+        • Secteur hautement réglementé
+        • Besoin rapidité (3-6 mois)
+        • Risque à minimiser
+        """)
+    
+    # Budget total
+    st.markdown("<br>", unsafe_allow_html=True)
+    st.markdown(f"""
+    <div style='background: linear-gradient(135deg, #FCD34D 0%, #F59E0B 100%); padding: 1.5rem; border-radius: 1rem; color: #78350F;'>
+        <div style='display: flex; justify-content: space-between; align-items: center;'>
+            <div>
+                <div style='font-size: 0.9rem; font-weight: bold;'>💰 VOTRE BUDGET TOTAL DISPONIBLE</div>
+                <div style='font-size: 2.5rem; font-weight: bold; margin-top: 0.5rem;'>{formater_cout(budget_info['montant'])}</div>
+            </div>
+            <div style='text-align: right;'>
+                <div style='font-size: 0.9rem; font-weight: bold;'>Obligations légales</div>
+                <div style='font-size: 2rem; font-weight: bold; color: #DC2626;'>{nb_obligatoires} référentiel(s)</div>
+            </div>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
     
     st.markdown("<br>", unsafe_allow_html=True)
     
@@ -683,25 +660,17 @@ with st.sidebar:
     st.markdown("""
     <div style='background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
                 padding: 1.5rem; border-radius: 1rem; color: white; text-align: center; margin-bottom: 1rem;'>
-        <h2 style='margin: 0; font-size: 1.5rem;'>🔒 Assistant Conformité</h2>
+        <h2 style='margin: 0; font-size: 1.5rem;'>🔒 Conformité</h2>
         <p style='margin: 0.5rem 0 0 0; opacity: 0.9;'>Version MVP 1.0</p>
     </div>
     """, unsafe_allow_html=True)
     
     st.markdown("### ℹ️ À propos")
     st.info("""
-    ✅ Identifie obligations légales  
-    💰 Calcule coûts réels  
-    📊 Optimise budget  
-    📋 Planifie implémentation
-    """)
-    
-    st.markdown("### 📈 Opportunité")
-    st.success("""
-    **Marché québécois:**  
-    • 277K PME concernées  
-    • Marché 6,6G$  
-    • Conformité < 40%
+    ✅ Obligations légales  
+    💰 Calcul coûts réels  
+    📊 Optimisation budget  
+    📋 Plan d'action
     """)
     
     st.divider()
@@ -714,4 +683,4 @@ with st.sidebar:
     """)
     
     st.divider()
-    st.caption("© 2026 - Tous droits réservés")
+    st.caption("© 2026")
