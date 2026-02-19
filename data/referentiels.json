@@ -3,70 +3,128 @@
     "loi25": {
       "id": "loi25",
       "name": "Loi 25",
+      "fullName": "Loi sur la protection des renseignements personnels (Québec)",
       "mandatory": true,
       "sectors": ["all"],
       "baseCost": 60000,
-      "description": "Obligatoire Québec"
+      "description": "Loi québécoise sur la protection des renseignements personnels - OBLIGATOIRE pour toutes les organisations",
+      "cloud": false,
+      "source": "CAI Québec, consultants locaux"
+    },
+    "nist_csf": {
+      "id": "nist_csf",
+      "name": "NIST CSF 2.0",
+      "fullName": "NIST Cybersecurity Framework 2.0",
+      "mandatory": false,
+      "sectors": ["all"],
+      "baseCost": 50000,
+      "description": "Framework reconnu mondialement pour la gestion des risques cybersécurité",
+      "cloud": false,
+      "source": "NIST, Secureframe, consultants"
+    },
+    "iso27001": {
+      "id": "iso27001",
+      "name": "ISO 27001",
+      "fullName": "ISO/IEC 27001:2022 - Système de management de la sécurité de l'information",
+      "mandatory": false,
+      "sectors": ["all"],
+      "baseCost": 75000,
+      "description": "Norme internationale pour la certification SMSI - Très valorisée par les clients",
+      "cloud": false,
+      "source": "Organismes de certification, consultants ISO"
+    },
+    "lprpsp": {
+      "id": "lprpsp",
+      "name": "LPRPSP",
+      "fullName": "Loi sur la protection des renseignements personnels dans le secteur privé (Santé)",
+      "mandatory": true,
+      "sectors": ["health"],
+      "baseCost": 75000,
+      "description": "OBLIGATOIRE pour le secteur de la santé au Québec - Exigences renforcées",
+      "cloud": false,
+      "source": "CAI Québec, consultants santé"
+    },
+    "csa_ccm": {
+      "id": "csa_ccm",
+      "name": "CSA CCM",
+      "fullName": "Cloud Security Alliance - Cloud Controls Matrix",
+      "mandatory": false,
+      "sectors": ["all"],
+      "baseCost": 90000,
+      "description": "Framework spécialisé pour la sécurité cloud - Recommandé si vous utilisez AWS/Azure/GCP",
+      "cloud": true,
+      "source": "Cloud Security Alliance, consultants cloud"
+    },
+    "iso27018": {
+      "id": "iso27018",
+      "name": "ISO 27018",
+      "fullName": "ISO/IEC 27018:2019 - Protection des données personnelles dans le cloud",
+      "mandatory": false,
+      "sectors": ["all"],
+      "baseCost": 120000,
+      "description": "Norme spécifique pour la protection des données personnelles dans les services cloud publics",
+      "cloud": true,
+      "source": "Organismes de certification, consultants cloud"
     }
   },
   "economies": {
     "responsable_donnees": {
       "label": "Responsable de la protection des données désigné",
-      "description": "Une personne formellement responsable de la conformité",
+      "description": "Une personne formellement responsable de la conformité et de la protection des données personnelles",
       "economie": 20000,
       "categorie": "gouvernance"
     },
     "politiques_documentees": {
       "label": "Politiques de sécurité et confidentialité documentées",
-      "description": "Documents écrits décrivant vos pratiques",
+      "description": "Documents écrits décrivant vos pratiques de sécurité et de protection des données",
       "economie": 15000,
       "categorie": "gouvernance"
     },
     "formation_programme": {
-      "label": "Programme de formation et sensibilisation",
-      "description": "Formation régulière des employés",
+      "label": "Programme de formation et sensibilisation existant",
+      "description": "Formation régulière des employés sur la sécurité et la protection des données",
       "economie": 10000,
       "categorie": "gouvernance"
     },
     "chiffrement": {
       "label": "Chiffrement des données (au repos et en transit)",
-      "description": "SSL/TLS, encryption bases de données",
+      "description": "SSL/TLS pour les communications, encryption des bases de données et stockage",
       "economie": 25000,
       "categorie": "securite"
     },
     "controles_acces": {
       "label": "Contrôles d'accès et authentification robustes",
-      "description": "MFA, gestion des identités, principe du moindre privilège",
+      "description": "MFA, gestion des identités, principe du moindre privilège, revues d'accès",
       "economie": 20000,
       "categorie": "securite"
     },
     "surveillance": {
       "label": "Surveillance et journalisation des accès",
-      "description": "Logs centralisés, monitoring, alertes",
+      "description": "Logs centralisés, monitoring en temps réel, alertes automatiques",
       "economie": 15000,
       "categorie": "securite"
     },
     "sauvegardes": {
       "label": "Sauvegardes régulières et plan de reprise",
-      "description": "Backups automatisés, disaster recovery",
+      "description": "Backups automatisés, tests de restauration, disaster recovery plan",
       "economie": 12000,
       "categorie": "securite"
     },
     "gestion_incidents": {
       "label": "Processus de gestion des incidents documenté",
-      "description": "Plan de réponse aux incidents, équipe dédiée",
+      "description": "Plan de réponse aux incidents, équipe dédiée, procédures testées",
       "economie": 18000,
       "categorie": "processus"
     },
     "registre_traitements": {
       "label": "Registre des activités de traitement maintenu",
-      "description": "Documentation de vos traitements de données",
+      "description": "Documentation à jour de tous vos traitements de données personnelles",
       "economie": 15000,
       "categorie": "processus"
     },
     "evaluations_risques": {
-      "label": "Évaluations de risques régulières",
-      "description": "Analyse des risques cyber et vie privée",
+      "label": "Évaluations de risques régulières (ÉFVP)",
+      "description": "Analyse des risques cyber et vie privée, ÉFVP pour les projets à risque",
       "economie": 20000,
       "categorie": "processus"
     }
