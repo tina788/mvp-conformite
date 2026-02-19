@@ -1,0 +1,134 @@
+{
+  "referentiels": {
+    "loi25": {
+      "id": "loi25",
+      "name": "Loi 25",
+      "fullName": "Protection des renseignements personnels",
+      "mandatory": true,
+      "sectors": ["all"],
+      "baseCost": 60000,
+      "description": "Loi québécoise - OBLIGATOIRE",
+      "cloud": false,
+      "source": "CAI Québec, consultants conformité QC 2024-2026"
+    },
+    "nist-csf": {
+      "id": "nist-csf",
+      "name": "NIST CSF 2.0",
+      "fullName": "Cybersecurity Framework",
+      "mandatory": false,
+      "sectors": ["all"],
+      "baseCost": 50000,
+      "description": "Framework cybersécurité US (gratuit, volontaire)",
+      "cloud": false,
+      "source": "NIST.gov, CompassMSP, CyberSaint 2024-2025"
+    },
+    "iso27001": {
+      "id": "iso27001",
+      "name": "ISO 27001:2022",
+      "fullName": "Système de management sécurité info",
+      "mandatory": false,
+      "sectors": ["all"],
+      "baseCost": 75000,
+      "certification": true,
+      "description": "Certification internationale SMSI",
+      "cloud": false,
+      "source": "Matayo AI, IAS Canada, Secureframe 2024-2025"
+    },
+    "lprpsp": {
+      "id": "lprpsp",
+      "name": "LPRPSP",
+      "fullName": "Protection RP secteur santé",
+      "mandatory": true,
+      "sectors": ["health"],
+      "baseCost": 75000,
+      "description": "Loi santé privée Québec - OBLIGATOIRE santé",
+      "cloud": false,
+      "source": "CAI Québec, estimation marché 2025"
+    },
+    "csa-ccm": {
+      "id": "csa-ccm",
+      "name": "CSA CCM v4",
+      "fullName": "Cloud Controls Matrix",
+      "mandatory": false,
+      "sectors": ["all"],
+      "baseCost": 90000,
+      "description": "Contrôles cloud - Optionnel",
+      "cloud": true,
+      "source": "CSA, estimation marché 2025"
+    },
+    "iso27018": {
+      "id": "iso27018",
+      "name": "ISO 27018:2019",
+      "fullName": "Protection cloud public",
+      "mandatory": false,
+      "sectors": ["all"],
+      "baseCost": 120000,
+      "certification": true,
+      "description": "Protection données cloud - Certification",
+      "cloud": true,
+      "source": "ISO, estimation marché cloud 2025"
+    }
+  },
+  "economies": {
+    "responsable_donnees": {
+      "label": "Responsable de la protection des données désigné",
+      "description": "Une personne formellement responsable de la conformité",
+      "economie": 20000,
+      "categorie": "gouvernance"
+    },
+    "politiques_documentees": {
+      "label": "Politiques de sécurité et confidentialité documentées",
+      "description": "Documents écrits décrivant vos pratiques",
+      "economie": 15000,
+      "categorie": "gouvernance"
+    },
+    "formation_programme": {
+      "label": "Programme de formation et sensibilisation",
+      "description": "Formation régulière des employés",
+      "economie": 10000,
+      "categorie": "gouvernance"
+    },
+    "chiffrement": {
+      "label": "Chiffrement des données (au repos et en transit)",
+      "description": "SSL/TLS, encryption bases de données",
+      "economie": 25000,
+      "categorie": "securite"
+    },
+    "controles_acces": {
+      "label": "Contrôles d'accès et authentification robustes",
+      "description": "MFA, gestion des identités, principe du moindre privilège",
+      "economie": 20000,
+      "categorie": "securite"
+    },
+    "surveillance": {
+      "label": "Surveillance et journalisation des accès",
+      "description": "Logs centralisés, monitoring, alertes",
+      "economie": 15000,
+      "categorie": "securite"
+    },
+    "sauvegardes": {
+      "label": "Sauvegardes régulières et plan de reprise",
+      "description": "Backups automatisés, disaster recovery",
+      "economie": 12000,
+      "categorie": "securite"
+    },
+    "gestion_incidents": {
+      "label": "Processus de gestion des incidents documenté",
+      "description": "Plan de réponse aux incidents, équipe dédiée",
+      "economie": 18000,
+      "categorie": "processus"
+    },
+    "registre_traitements": {
+      "label": "Registre des activités de traitement maintenu",
+      "description": "Documentation de vos traitements de données",
+      "economie": 15000,
+      "categorie": "processus"
+    },
+    "evaluations_risques": {
+      "label": "Évaluations de risques régulières",
+      "description": "Analyse des risques cyber et vie privée",
+      "economie": 20000,
+      "categorie": "processus"
+    }
+  }
+}

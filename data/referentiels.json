@@ -1,0 +1,74 @@
+{
+  "referentiels": {
+    "loi25": {
+      "id": "loi25",
+      "name": "Loi 25",
+      "mandatory": true,
+      "sectors": ["all"],
+      "baseCost": 60000,
+      "description": "Obligatoire Québec"
+    }
+  },
+  "economies": {
+    "responsable_donnees": {
+      "label": "Responsable de la protection des données désigné",
+      "description": "Une personne formellement responsable de la conformité",
+      "economie": 20000,
+      "categorie": "gouvernance"
+    },
+    "politiques_documentees": {
+      "label": "Politiques de sécurité et confidentialité documentées",
+      "description": "Documents écrits décrivant vos pratiques",
+      "economie": 15000,
+      "categorie": "gouvernance"
+    },
+    "formation_programme": {
+      "label": "Programme de formation et sensibilisation",
+      "description": "Formation régulière des employés",
+      "economie": 10000,
+      "categorie": "gouvernance"
+    },
+    "chiffrement": {
+      "label": "Chiffrement des données (au repos et en transit)",
+      "description": "SSL/TLS, encryption bases de données",
+      "economie": 25000,
+      "categorie": "securite"
+    },
+    "controles_acces": {
+      "label": "Contrôles d'accès et authentification robustes",
+      "description": "MFA, gestion des identités, principe du moindre privilège",
+      "economie": 20000,
+      "categorie": "securite"
+    },
+    "surveillance": {
+      "label": "Surveillance et journalisation des accès",
+      "description": "Logs centralisés, monitoring, alertes",
+      "economie": 15000,
+      "categorie": "securite"
+    },
+    "sauvegardes": {
+      "label": "Sauvegardes régulières et plan de reprise",
+      "description": "Backups automatisés, disaster recovery",
+      "economie": 12000,
+      "categorie": "securite"
+    },
+    "gestion_incidents": {
+      "label": "Processus de gestion des incidents documenté",
+      "description": "Plan de réponse aux incidents, équipe dédiée",
+      "economie": 18000,
+      "categorie": "processus"
+    },
+    "registre_traitements": {
+      "label": "Registre des activités de traitement maintenu",
+      "description": "Documentation de vos traitements de données",
+      "economie": 15000,
+      "categorie": "processus"
+    },
+    "evaluations_risques": {
+      "label": "Évaluations de risques régulières",
+      "description": "Analyse des risques cyber et vie privée",
+      "economie": 20000,
+      "categorie": "processus"
+    }
+  }
+}
